@@ -1,0 +1,18 @@
+<div>
+  <div class="d-flex justify-content-center">
+    <div class="col-md-8">
+      <h1>Activación</h1>
+      @if (success()) {
+        <div class="alert alert-success">
+          <span><strong>Su cuenta ha sido activada.</strong> Por favor, </span>
+          <a class="alert-link" routerLink="/login">iniciar sesión</a>.
+        </div>
+      }
+      @if (error()) {
+        <div class="alert alert-danger">
+          <strong>Su cuenta no pudo ser activada.</strong> Por favor, utilice el formulario de inscripción para registrarse.
+        </div>
+      }
+    </div>
+  </div>
+</div>

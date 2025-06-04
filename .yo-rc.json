@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "ocaCobijo",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientTestFrameworks": [],
+    "clientTheme": "none",
+    "creationTimestamp": 1749073825856,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "enableHibernateCache": false,
+    "enableTranslation": false,
+    "entities": [],
+    "feignClient": null,
+    "jhipsterVersion": "8.8.0",
+    "jwtSecretKey": "NTE3YmQ3ZWM1OWNkOTlhMWUyOTNhM2UwZmMzZjQzY2E4ZTI4NjliMTg3OTI3M2U3MzkxNDUwNzEzZDIwZGIzOTRkYzg4YmZlOGYyY2I1MGZhYmY4MWM4ZThlZjk0Y2MwMjc3MDQ2OTM3ZDhmODVkODdkOTMzYjQ0NGNmZDBlMGM=",
+    "microfrontend": null,
+    "microfrontends": [],
+    "nativeLanguage": "es",
+    "packageName": "com.cobijo.oca",
+    "prodDatabaseType": "mysql",
+    "reactive": false,
+    "serverPort": null,
+    "serviceDiscoveryType": null,
+    "syncUserWithIdp": null,
+    "testFrameworks": [],
+    "websocket": "spring-websocket",
+    "withAdminUi": true
+  }
+}

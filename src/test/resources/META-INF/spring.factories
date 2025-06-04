@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory = \
+    com.cobijo.oca.config.SqlTestContainersSpringContextCustomizerFactory
