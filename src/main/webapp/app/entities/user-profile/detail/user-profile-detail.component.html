@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (userProfile(); as userProfileRef) {
+      <div>
+        <h2 data-cy="userProfileDetailsHeading"><span>User Profile</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ userProfileRef.id }}</span>
+          </dd>
+          <dt><span>Nickname</span></dt>
+          <dd>
+            <span>{{ userProfileRef.nickname }}</span>
+          </dd>
+          <dt><span>Avatar Url</span></dt>
+          <dd>
+            <span>{{ userProfileRef.avatarUrl }}</span>
+          </dd>
+          <dt><span>Games</span></dt>
+          <dd>
+            @for (games of userProfileRef.games; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/game', games.id, 'view']">{{ games?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span>User</span></dt>
+          <dd>
+            <span>{{ userProfileRef.user?.id }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/user-profile', userProfileRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

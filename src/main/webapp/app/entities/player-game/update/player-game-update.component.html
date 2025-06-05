@@ -1,0 +1,112 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-player-game-heading" data-cy="PlayerGameCreateUpdateHeading">Crear o editar Player Game</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let positionxRef = editForm.get('positionx')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_positionx">Positionx</label>
+          <input type="number" class="form-control" name="positionx" id="field_positionx" data-cy="positionx" formControlName="positionx" />
+          @if (positionxRef.invalid && (positionxRef.dirty || positionxRef.touched)) {
+            <div>
+              @if (editForm.get('positionx')?.errors?.required) {
+                <small class="form-text text-danger">Este campo es obligatorio.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('positionx')?.errors?.number"
+                >Este campo debe ser un número.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let positionyRef = editForm.get('positiony')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_positiony">Positiony</label>
+          <input type="number" class="form-control" name="positiony" id="field_positiony" data-cy="positiony" formControlName="positiony" />
+          @if (positionyRef.invalid && (positionyRef.dirty || positionyRef.touched)) {
+            <div>
+              @if (editForm.get('positiony')?.errors?.required) {
+                <small class="form-text text-danger">Este campo es obligatorio.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('positiony')?.errors?.number"
+                >Este campo debe ser un número.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let orderRef = editForm.get('order')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_order">Order</label>
+          <input type="number" class="form-control" name="order" id="field_order" data-cy="order" formControlName="order" />
+          @if (orderRef.invalid && (orderRef.dirty || orderRef.touched)) {
+            <div>
+              @if (editForm.get('order')?.errors?.required) {
+                <small class="form-text text-danger">Este campo es obligatorio.</small>
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('order')?.errors?.number">Este campo debe ser un número.</small>
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isWinner">Is Winner</label>
+          <input type="checkbox" class="form-check" name="isWinner" id="field_isWinner" data-cy="isWinner" formControlName="isWinner" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_game">Game</label>
+          <select class="form-control" id="field_game" data-cy="game" name="game" formControlName="game" [compareWith]="compareGame">
+            <option [ngValue]="null"></option>
+            @for (gameOption of gamesSharedCollection; track $index) {
+              <option [ngValue]="gameOption">{{ gameOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_userProfile">User Profile</label>
+          <select
+            class="form-control"
+            id="field_userProfile"
+            data-cy="userProfile"
+            name="userProfile"
+            formControlName="userProfile"
+            [compareWith]="compareUserProfile"
+          >
+            <option [ngValue]="null"></option>
+            @for (userProfileOption of userProfilesSharedCollection; track $index) {
+              <option [ngValue]="userProfileOption">{{ userProfileOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

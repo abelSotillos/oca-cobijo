@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20250605182217"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "positionx",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "positiony",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "order",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isWinner",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "PlayerGame",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "game",
+      "otherEntityRelationshipName": "playerGames",
+      "relationshipName": "game",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "playerGames",
+      "relationshipName": "userProfile",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

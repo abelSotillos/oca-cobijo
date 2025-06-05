@@ -41,6 +41,13 @@ public class CacheConfiguration {
             createCache(cm, com.cobijo.oca.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, com.cobijo.oca.repository.UserRepository.USERS_BY_EMAIL_CACHE);
             createCache(cm, com.cobijo.oca.domain.Authority.class.getName());
+            createCache(cm, com.cobijo.oca.domain.Game.class.getName());
+            createCache(cm, com.cobijo.oca.domain.Game.class.getName() + ".playerGames");
+            createCache(cm, com.cobijo.oca.domain.Game.class.getName() + ".userProfiles");
+            createCache(cm, com.cobijo.oca.domain.PlayerGame.class.getName());
+            createCache(cm, com.cobijo.oca.domain.UserProfile.class.getName());
+            createCache(cm, com.cobijo.oca.domain.UserProfile.class.getName() + ".playerGames");
+            createCache(cm, com.cobijo.oca.domain.UserProfile.class.getName() + ".games");
             // jhipster-needle-ehcache-add-entry
         };
     }

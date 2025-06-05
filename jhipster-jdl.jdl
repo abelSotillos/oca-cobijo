@@ -1,0 +1,36 @@
+entity UserProfile {
+  nickname String required,
+  avatarUrl String
+}
+
+entity Game {
+  code String required,
+  status GameStatus required,
+  currentTurn Integer
+}
+
+enum GameStatus {
+  WAITING,
+  IN_PROGRESS,
+  FINISHED
+}
+
+entity PlayerGame {
+  positionx Integer required,
+  positiony Integer required,
+  order Integer required,
+  isWinner Boolean
+}
+
+relationship ManyToMany {
+  Game{userProfiles} to UserProfile{games}
+}
+
+relationship OneToMany {
+  Game{playerGames} to PlayerGame{game},
+  UserProfile{playerGames} to PlayerGame{userProfile},
+}
+
+dto UserProfile, Game, PlayerGame with mapstruct
+paginate UserProfile, Game, PlayerGame with pagination
+service UserProfile, Game, PlayerGame with serviceClass

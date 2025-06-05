@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20250605182216"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "GameStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "WAITING,IN_PROGRESS,FINISHED"
+    },
+    {
+      "fieldName": "currentTurn",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "Game",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "playerGame",
+      "otherEntityRelationshipName": "game",
+      "relationshipName": "playerGames",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "games",
+      "relationshipName": "userProfiles",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

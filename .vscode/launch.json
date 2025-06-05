@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-OcaCobijoApp<oca-cobijo>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.cobijo.oca.OcaCobijoApp",
+      "projectName": "oca-cobijo",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

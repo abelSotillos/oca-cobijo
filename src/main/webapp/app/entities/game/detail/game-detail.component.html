@@ -1,0 +1,51 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (game(); as gameRef) {
+      <div>
+        <h2 data-cy="gameDetailsHeading"><span>Game</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ gameRef.id }}</span>
+          </dd>
+          <dt><span>Code</span></dt>
+          <dd>
+            <span>{{ gameRef.code }}</span>
+          </dd>
+          <dt><span>Status</span></dt>
+          <dd>
+            <span>{{ { null: '', WAITING: 'WAITING', IN_PROGRESS: 'IN_PROGRESS', FINISHED: 'FINISHED' }[gameRef.status ?? 'null'] }}</span>
+          </dd>
+          <dt><span>Current Turn</span></dt>
+          <dd>
+            <span>{{ gameRef.currentTurn }}</span>
+          </dd>
+          <dt><span>User Profiles</span></dt>
+          <dd>
+            @for (userProfiles of gameRef.userProfiles; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/user-profile', userProfiles.id, 'view']">{{ userProfiles?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/game', gameRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

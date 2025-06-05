@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (playerGame(); as playerGameRef) {
+      <div>
+        <h2 data-cy="playerGameDetailsHeading"><span>Player Game</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ playerGameRef.id }}</span>
+          </dd>
+          <dt><span>Positionx</span></dt>
+          <dd>
+            <span>{{ playerGameRef.positionx }}</span>
+          </dd>
+          <dt><span>Positiony</span></dt>
+          <dd>
+            <span>{{ playerGameRef.positiony }}</span>
+          </dd>
+          <dt><span>Order</span></dt>
+          <dd>
+            <span>{{ playerGameRef.order }}</span>
+          </dd>
+          <dt><span>Is Winner</span></dt>
+          <dd>
+            <span>{{ playerGameRef.isWinner }}</span>
+          </dd>
+          <dt><span>Game</span></dt>
+          <dd>
+            @if (playerGame()!.game) {
+              <div>
+                <a [routerLink]="['/game', playerGame()!.game?.id, 'view']">{{ playerGameRef.game?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>User Profile</span></dt>
+          <dd>
+            @if (playerGame()!.userProfile) {
+              <div>
+                <a [routerLink]="['/user-profile', playerGame()!.userProfile?.id, 'view']">{{ playerGameRef.userProfile?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/player-game', playerGameRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

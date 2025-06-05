@@ -1,0 +1,153 @@
+<div>
+  <h2 id="page-heading" data-cy="PlayerGameHeading">
+    <span>Player Games</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span>Refrescar lista</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-player-game"
+        [routerLink]="['/player-game/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span>Crear nuevo Player Game</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  @if (playerGames().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span>Ningún Player Games encontrado</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span>ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="positionx">
+              <div class="d-flex">
+                <span>Positionx</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="positiony">
+              <div class="d-flex">
+                <span>Positiony</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="order">
+              <div class="d-flex">
+                <span>Order</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isWinner">
+              <div class="d-flex">
+                <span>Is Winner</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="game.id">
+              <div class="d-flex">
+                <span>Game</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="userProfile.id">
+              <div class="d-flex">
+                <span>User Profile</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (playerGame of playerGames(); track trackId(playerGame)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/player-game', playerGame.id, 'view']">{{ playerGame.id }}</a>
+              </td>
+              <td>{{ playerGame.positionx }}</td>
+              <td>{{ playerGame.positiony }}</td>
+              <td>{{ playerGame.order }}</td>
+              <td>{{ playerGame.isWinner }}</td>
+              <td>
+                @if (playerGame.game) {
+                  <div>
+                    <a [routerLink]="['/game', playerGame.game.id, 'view']">{{ playerGame.game.id }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (playerGame.userProfile) {
+                  <div>
+                    <a [routerLink]="['/user-profile', playerGame.userProfile.id, 'view']">{{ playerGame.userProfile.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/player-game', playerGame.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline">Vista</span>
+                  </a>
+
+                  <a [routerLink]="['/player-game', playerGame.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline">Editar</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(playerGame)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline">Eliminar</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (playerGames().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

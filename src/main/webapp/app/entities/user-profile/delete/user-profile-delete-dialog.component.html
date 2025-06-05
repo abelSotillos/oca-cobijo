@@ -1,0 +1,22 @@
+@if (userProfile) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(userProfile.id!)">
+    <div class="modal-header">
+      <h4 class="modal-title" data-cy="userProfileDeleteDialogHeading">Confirmar operación de borrado</h4>
+    </div>
+
+    <div class="modal-body">
+      <jhi-alert-error></jhi-alert-error>
+      <p id="jhi-delete-userProfile-heading">¿Seguro que quiere eliminar User Profile {{ userProfile.id }}?</p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
+      </button>
+
+      <button id="jhi-confirm-delete-userProfile" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span>Eliminar</span>
+      </button>
+    </div>
+  </form>
+}
