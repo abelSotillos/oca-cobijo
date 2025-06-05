@@ -13,6 +13,7 @@ import PageRibbonComponent from '../profiles/page-ribbon.component';
   imports: [RouterOutlet, FooterComponent, PageRibbonComponent],
 })
 export default class MainComponent implements OnInit {
+  isLoggin = true;
   private readonly router = inject(Router);
   private readonly appPageTitleStrategy = inject(AppPageTitleStrategy);
   private readonly accountService = inject(AccountService);
@@ -20,5 +21,21 @@ export default class MainComponent implements OnInit {
   ngOnInit(): void {
     // try to log in automatically
     this.accountService.identity().subscribe();
+    this.accountService.identity().subscribe(res => {
+      if (res === null) {
+        this.router.navigate(['/login']);
+      } else {
+        this.isLoggin = false;
+      }
+    });
+    this.router.events.subscribe({
+      next: () => {
+        if (this.router.url === '/login') {
+          this.isLoggin = true;
+        } else {
+          this.isLoggin = false;
+        }
+      },
+    });
   }
 }
