@@ -5,7 +5,9 @@
 /* ==============================================================
 Bootstrap tweaks
 ===============================================================*/
-
+body {
+  height: 100vh;
+}
 body,
 h1,
 h2,
@@ -67,8 +69,6 @@ Generic styles
 /* other generic styles */
 
 .jh-card {
-  padding: 1.5%;
-  margin-top: 20px;
   border: none;
 }
 
@@ -234,3 +234,8 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   }
 }
 /* jhipster-needle-scss-add-main JHipster will add new css style */
+.main-div {
+  background-color: #f6e7c6;
+  width: 100%;
+  height: 100%;
+}

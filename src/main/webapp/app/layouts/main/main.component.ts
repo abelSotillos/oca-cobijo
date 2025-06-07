@@ -24,6 +24,7 @@ export default class MainComponent implements OnInit {
     this.accountService.identity().subscribe(res => {
       if (res === null) {
         this.router.navigate(['/login']);
+        this.isLoggin = true;
       } else {
         this.isLoggin = false;
       }

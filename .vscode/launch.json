@@ -8,7 +8,8 @@
       "mainClass": "com.cobijo.oca.OcaCobijoApp",
       "projectName": "oca-cobijo",
       "args": "",
-      "envFile": "${workspaceFolder}/.env"
+      "envFile": "${workspaceFolder}/.env",
+      "console": "internalConsole"
     }
   ]
 }

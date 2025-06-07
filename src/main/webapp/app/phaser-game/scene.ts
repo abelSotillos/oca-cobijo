@@ -13,7 +13,6 @@ export class MainScene extends Phaser.Scene {
 
   preload(): void {
     this.load.image('board', 'content/images/tablero.jpg');
-    this.load.image('token', 'content/images/jhipster_family_member_0.svg');
   }
 
   create(): void {
