@@ -5,6 +5,7 @@ import com.cobijo.oca.domain.Authority;
 import com.cobijo.oca.domain.User;
 import com.cobijo.oca.repository.AuthorityRepository;
 import com.cobijo.oca.repository.UserRepository;
+import com.cobijo.oca.repository.UserProfileRepository;
 import com.cobijo.oca.security.AuthoritiesConstants;
 import com.cobijo.oca.security.SecurityUtils;
 import com.cobijo.oca.service.dto.AdminUserDTO;
@@ -41,16 +42,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final UserProfileRepository userProfileRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        UserProfileRepository userProfileRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.userProfileRepository = userProfileRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -130,6 +135,12 @@ public class UserService {
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
+        // create associated user profile
+        com.cobijo.oca.domain.UserProfile profile = new com.cobijo.oca.domain.UserProfile();
+        profile.setNickname(newUser.getLogin());
+        profile.setUser(newUser);
+        userProfileRepository.save(profile);
+
         this.clearUserCaches(newUser);
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -175,6 +186,12 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
+        // create associated user profile
+        com.cobijo.oca.domain.UserProfile profile = new com.cobijo.oca.domain.UserProfile();
+        profile.setNickname(user.getLogin());
+        profile.setUser(user);
+        userProfileRepository.save(profile);
+
         this.clearUserCaches(user);
         LOG.debug("Created Information for User: {}", user);
         return user;
