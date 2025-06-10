@@ -5,6 +5,7 @@ export interface IUserProfile {
   id: number;
   nickname?: string | null;
   avatarUrl?: string | null;
+  sessionId?: string | null;
   games?: Pick<IGame, 'id'>[] | null;
   user?: Pick<IUser, 'id'> | null;
 }

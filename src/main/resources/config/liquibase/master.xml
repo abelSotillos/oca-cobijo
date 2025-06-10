@@ -14,6 +14,7 @@
     <include file="config/liquibase/changelog/20250605182216_added_entity_Game.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250605182217_added_entity_PlayerGame.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250605182218_added_entity_UserProfile.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250606120000_add_sessionid_to_user_profile.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20250605182216_added_entity_constraints_Game.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20250605182217_added_entity_constraints_PlayerGame.xml" relativeToChangelogFile="false"/>

@@ -5,6 +5,7 @@ import static com.cobijo.oca.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.cobijo.oca.web.rest.vm.LoginVM;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.cobijo.oca.service.UserProfileService;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
@@ -39,6 +40,8 @@ public class AuthenticateController {
 
     private final JwtEncoder jwtEncoder;
 
+    private final UserProfileService userProfileService;
+
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds:0}")
     private long tokenValidityInSeconds;
 
@@ -47,9 +50,10 @@ public class AuthenticateController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, UserProfileService userProfileService) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userProfileService = userProfileService;
     }
 
     @PostMapping("/authenticate")
@@ -62,9 +66,11 @@ public class AuthenticateController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = this.createToken(authentication, loginVM.isRememberMe());
+        String sessionId = java.util.UUID.randomUUID().toString();
+        userProfileService.updateSessionIdForUser(authentication.getName(), sessionId);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new JWTToken(jwt, sessionId), httpHeaders, HttpStatus.OK);
     }
 
     /**
@@ -108,9 +114,11 @@ public class AuthenticateController {
     static class JWTToken {
 
         private String idToken;
+        private String sessionId;
 
-        JWTToken(String idToken) {
+        JWTToken(String idToken, String sessionId) {
             this.idToken = idToken;
+            this.sessionId = sessionId;
         }
 
         @JsonProperty("id_token")
@@ -120,6 +128,15 @@ public class AuthenticateController {
 
         void setIdToken(String idToken) {
             this.idToken = idToken;
+        }
+
+        @JsonProperty("session_id")
+        String getSessionId() {
+            return sessionId;
+        }
+
+        void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
         }
     }
 }

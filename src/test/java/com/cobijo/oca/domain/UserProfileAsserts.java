@@ -48,7 +48,8 @@ public class UserProfileAsserts {
         assertThat(expected)
             .as("Verify UserProfile relevant properties")
             .satisfies(e -> assertThat(e.getNickname()).as("check nickname").isEqualTo(actual.getNickname()))
-            .satisfies(e -> assertThat(e.getAvatarUrl()).as("check avatarUrl").isEqualTo(actual.getAvatarUrl()));
+            .satisfies(e -> assertThat(e.getAvatarUrl()).as("check avatarUrl").isEqualTo(actual.getAvatarUrl()))
+            .satisfies(e -> assertThat(e.getSessionId()).as("check sessionId").isEqualTo(actual.getSessionId()));
     }
 
     /**

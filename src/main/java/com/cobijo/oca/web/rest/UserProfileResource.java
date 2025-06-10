@@ -3,6 +3,7 @@ package com.cobijo.oca.web.rest;
 import com.cobijo.oca.repository.UserProfileRepository;
 import com.cobijo.oca.service.UserProfileService;
 import com.cobijo.oca.service.dto.UserProfileDTO;
+import com.cobijo.oca.service.dto.NicknameDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -64,6 +65,23 @@ public class UserProfileResource {
         return ResponseEntity.created(new URI("/api/user-profiles/" + userProfileDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, userProfileDTO.getId().toString()))
             .body(userProfileDTO);
+    }
+
+    @PostMapping("/guest")
+    public ResponseEntity<UserProfileDTO> createGuest(@RequestBody NicknameDTO nicknameDTO) {
+        LOG.debug("REST request to create guest profile : {}", nicknameDTO);
+        UserProfileDTO dto = new UserProfileDTO();
+        dto.setNickname(nicknameDTO.getNickname());
+        dto.setSessionId(java.util.UUID.randomUUID().toString());
+        dto = userProfileService.save(dto);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/session/{sessionId}")
+    public ResponseEntity<UserProfileDTO> getBySession(@PathVariable String sessionId) {
+        LOG.debug("REST request to get UserProfile by session : {}", sessionId);
+        Optional<UserProfileDTO> result = userProfileService.findOneBySessionId(sessionId);
+        return ResponseUtil.wrapOrNotFound(result);
     }
 
     /**

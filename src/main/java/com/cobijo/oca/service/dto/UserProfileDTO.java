@@ -19,9 +19,19 @@ public class UserProfileDTO implements Serializable {
 
     private String avatarUrl;
 
+    private String sessionId;
+
     private Set<GameDTO> games = new HashSet<>();
 
     private UserDTO user;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public Long getId() {
         return id;
@@ -91,6 +101,7 @@ public class UserProfileDTO implements Serializable {
             "id=" + getId() +
             ", nickname='" + getNickname() + "'" +
             ", avatarUrl='" + getAvatarUrl() + "'" +
+            ", sessionId='" + getSessionId() + "'" +
             ", games=" + getGames() +
             ", user=" + getUser() +
             "}";

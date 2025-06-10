@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {}
+public interface UserProfileRepository extends JpaRepository<UserProfile, Long> {
+    java.util.Optional<UserProfile> findOneBySessionId(String sessionId);
+    java.util.Optional<UserProfile> findOneByUser_Login(String login);
+}

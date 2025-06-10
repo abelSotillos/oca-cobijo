@@ -15,6 +15,7 @@ export const sampleWithFullData: IUserProfile = {
   id: 9570,
   nickname: 'folklore glisten cuddly',
   avatarUrl: 'guidance second',
+  sessionId: 'sample-session',
 };
 
 export const sampleWithNewData: NewUserProfile = {
