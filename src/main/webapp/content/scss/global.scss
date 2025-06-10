@@ -14,6 +14,7 @@ h2,
 h3,
 h4 {
   font-weight: 300;
+  font-family: monospace;
 }
 
 /* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
@@ -69,7 +70,9 @@ Generic styles
 /* other generic styles */
 
 .jh-card {
-  border: none;
+  border: 5px solid #ec214c;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .error {
@@ -238,4 +241,27 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   background-color: #f6e7c6;
   width: 100%;
   height: 100%;
+}
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+.heigh-nav {
+  height: calc(100% - 62px);
+}
+.heigh-100 {
+  height: 100%;
+}
+.div-img {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -62px;
+}
+.img-loggin {
+  height: 150px;
+  z-index: 10;
 }
