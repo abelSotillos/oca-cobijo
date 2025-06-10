@@ -8,6 +8,7 @@ jest.mock('phaser', () => ({
 }));
 
 import { PhaserGameComponent } from './phaser-game.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('PhaserGameComponent', () => {
   let component: PhaserGameComponent;
@@ -16,6 +17,7 @@ describe('PhaserGameComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [PhaserGameComponent],
+      providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PhaserGameComponent);

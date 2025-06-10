@@ -42,9 +42,13 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
     this.currentTurn = (this.currentTurn + 1) % this.players.length;
   }
 
+  ngOnDestroy(): void {
+    this.phaserGame?.destroy(true);
+  }
+
   private startGame(): void {
     const tokens: PlayerToken[] = this.players.map(p => ({
-      id: p.id!,
+      id: p.id,
       color: Phaser.Display.Color.RandomRGB().color,
       position: 0,
     }));
@@ -57,9 +61,5 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
       scene: [this.scene],
     };
     this.phaserGame = new Phaser.Game(config);
-  }
-
-  ngOnDestroy(): void {
-    this.phaserGame?.destroy(true);
   }
 }

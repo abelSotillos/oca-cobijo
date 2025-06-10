@@ -66,9 +66,7 @@ export class PlayerGameService {
   ): Type[] {
     const playerGames: Type[] = playerGamesToCheck.filter(isPresent);
     if (playerGames.length > 0) {
-      const playerGameCollectionIdentifiers = playerGameCollection.map(playerGameItem =>
-        this.getPlayerGameIdentifier(playerGameItem)
-      );
+      const playerGameCollectionIdentifiers = playerGameCollection.map(playerGameItem => this.getPlayerGameIdentifier(playerGameItem));
       const playerGamesToAdd = playerGames.filter(playerGameItem => {
         const playerGameIdentifier = this.getPlayerGameIdentifier(playerGameItem);
         if (playerGameCollectionIdentifiers.includes(playerGameIdentifier)) {
