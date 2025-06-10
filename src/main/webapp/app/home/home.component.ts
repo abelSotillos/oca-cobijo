@@ -6,23 +6,26 @@ import { takeUntil } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
-import { PhaserGameComponent } from '../phaser-game/phaser-game.component';
 import { GameService } from 'app/entities/game/service/game.service';
+import { IGame } from 'app/entities/game/game.model';
+import { UserProfileService } from 'app/entities/user-profile/service/user-profile.service';
 
 @Component({
   selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  imports: [SharedModule, RouterModule, PhaserGameComponent],
+  imports: [SharedModule, RouterModule],
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account = signal<Account | null>(null);
+  games = signal<IGame[]>([]);
 
   private readonly destroy$ = new Subject<void>();
 
   private readonly accountService = inject(AccountService);
   private readonly router = inject(Router);
   private readonly gameService = inject(GameService);
+  private readonly userProfileService = inject(UserProfileService);
 
   ngOnInit(): void {
     this.accountService
@@ -33,6 +36,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
           this.router.navigate(['/login']);
         } else {
           this.account.set(account);
+          this.loadGames();
         }
       });
   }
@@ -50,8 +54,31 @@ export default class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+  openGame(game: IGame): void {
+    if (game.code) {
+      this.router.navigate(['/room', game.code]);
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private loadGames(): void {
+    const sessionId = localStorage.getItem('session_id');
+    if (!sessionId) {
+      return;
+    }
+    this.userProfileService.findBySession(sessionId).subscribe(profileRes => {
+      const profile = profileRes.body;
+      if (profile?.id != null) {
+        this.gameService.query({ eagerload: true, size: 1000 }).subscribe(res => {
+          const games = res.body ?? [];
+          const filtered = games.filter(g => g.userProfiles?.some(u => u.id === profile.id));
+          this.games.set(filtered);
+        });
+      }
+    });
   }
 }

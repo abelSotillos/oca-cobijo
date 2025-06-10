@@ -1,2 +1,8 @@
 <button class="btn btn-primary mb-3" (click)="createRoom()">Crear sala</button>
-<jhi-phaser-game></jhi-phaser-game>
+
+<ul class="list-group">
+  <li *ngFor="let game of games()" class="list-group-item d-flex justify-content-between align-items-center">
+    <span>{{ game.code }} - {{ game.status }}</span>
+    <button class="btn btn-link" (click)="openGame(game)">Entrar</button>
+  </li>
+</ul>
