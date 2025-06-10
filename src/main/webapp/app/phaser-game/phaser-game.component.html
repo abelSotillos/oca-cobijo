@@ -1,1 +1,5 @@
+<div class="mb-2">
+  <button class="btn btn-primary" (click)="rollDice()">Tirar dado</button>
+  <span class="ms-2" *ngIf="diceValue">Dado: {{ diceValue }}</span>
+</div>
 <div #gameContainer></div>

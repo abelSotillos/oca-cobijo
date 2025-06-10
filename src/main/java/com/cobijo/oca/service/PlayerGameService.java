@@ -4,7 +4,9 @@ import com.cobijo.oca.domain.PlayerGame;
 import com.cobijo.oca.repository.PlayerGameRepository;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
 import com.cobijo.oca.service.mapper.PlayerGameMapper;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -86,6 +88,16 @@ public class PlayerGameService {
     public Page<PlayerGameDTO> findAll(Pageable pageable) {
         LOG.debug("Request to get all PlayerGames");
         return playerGameRepository.findAll(pageable).map(playerGameMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PlayerGameDTO> findByGameId(Long gameId) {
+        LOG.debug("Request to get PlayerGames by game : {}", gameId);
+        return playerGameRepository
+            .findByGameId(gameId)
+            .stream()
+            .map(playerGameMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
