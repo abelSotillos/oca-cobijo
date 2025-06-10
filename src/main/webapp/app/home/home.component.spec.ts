@@ -7,11 +7,13 @@ jest.mock('phaser', () => ({
 }));
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject, of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { GameService } from 'app/entities/game/service/game.service';
 
 import HomeComponent from './home.component';
 
@@ -34,7 +36,7 @@ describe('Home Component', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [HomeComponent],
-      providers: [AccountService],
+      providers: [AccountService, GameService, provideHttpClient()],
     })
       .overrideTemplate(HomeComponent, '')
       .compileComponents();

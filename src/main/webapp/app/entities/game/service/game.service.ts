@@ -44,6 +44,14 @@ export class GameService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  createRoom(): Observable<EntityResponseType> {
+    return this.http.post<IGame>(`${this.resourceUrl}/create-room`, {}, { observe: 'response' });
+  }
+
+  findByCode(code: string): Observable<EntityResponseType> {
+    return this.http.get<IGame>(`${this.resourceUrl}/code/${code}`, { observe: 'response' });
+  }
+
   getGameIdentifier(game: Pick<IGame, 'id'>): number {
     return game.id;
   }
