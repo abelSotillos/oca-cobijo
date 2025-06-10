@@ -109,4 +109,18 @@ public class UserProfileService {
         LOG.debug("Request to delete UserProfile : {}", id);
         userProfileRepository.deleteById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<UserProfileDTO> findOneBySessionId(String sessionId) {
+        return userProfileRepository.findOneBySessionId(sessionId).map(userProfileMapper::toDto);
+    }
+
+    public void updateSessionIdForUser(String login, String sessionId) {
+        userProfileRepository
+            .findOneByUser_Login(login)
+            .ifPresent(profile -> {
+                profile.setSessionId(sessionId);
+                userProfileRepository.save(profile);
+            });
+    }
 }

@@ -41,6 +41,9 @@ public class UserProfile implements Serializable {
     @JoinColumn(unique = true)
     private User user;
 
+    @Column(name = "session_id")
+    private String sessionId;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -157,6 +160,19 @@ public class UserProfile implements Serializable {
         return this;
     }
 
+    public String getSessionId() {
+        return this.sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public UserProfile sessionId(String sessionId) {
+        this.setSessionId(sessionId);
+        return this;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -183,6 +199,7 @@ public class UserProfile implements Serializable {
             "id=" + getId() +
             ", nickname='" + getNickname() + "'" +
             ", avatarUrl='" + getAvatarUrl() + "'" +
+            ", sessionId='" + getSessionId() + "'" +
             "}";
     }
 }

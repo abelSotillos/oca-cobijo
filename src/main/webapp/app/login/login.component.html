@@ -35,6 +35,15 @@
 
       <button type="submit" class="btn btn-primary" data-cy="submit">Iniciar sesión</button>
     </form>
+
+    <hr />
+    <form class="form" (ngSubmit)="loginGuest()" [formGroup]="guestForm">
+      <div class="mb-3">
+        <label for="nickname">Jugar como invitado</label>
+        <input type="text" class="form-control" name="nickname" id="nickname" placeholder="Tu apodo" formControlName="nickname" />
+      </div>
+      <button type="submit" class="btn btn-secondary">Entrar como invitado</button>
+    </form>
     <div class="mt-3 alert alert-warning">
       <a class="alert-link" routerLink="/account/reset/request" data-cy="forgetYourPasswordSelector">¿Ha olvidado su contraseña?</a>
     </div>
