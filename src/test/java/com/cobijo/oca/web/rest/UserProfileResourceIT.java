@@ -41,6 +41,9 @@ class UserProfileResourceIT {
     private static final String DEFAULT_AVATAR_URL = "AAAAAAAAAA";
     private static final String UPDATED_AVATAR_URL = "BBBBBBBBBB";
 
+    private static final String DEFAULT_SESSION_ID = "SSAAAA";
+    private static final String UPDATED_SESSION_ID = "SSBBBB";
+
     private static final String ENTITY_API_URL = "/api/user-profiles";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -76,7 +79,7 @@ class UserProfileResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserProfile createEntity() {
-        return new UserProfile().nickname(DEFAULT_NICKNAME).avatarUrl(DEFAULT_AVATAR_URL);
+        return new UserProfile().nickname(DEFAULT_NICKNAME).avatarUrl(DEFAULT_AVATAR_URL).sessionId(DEFAULT_SESSION_ID);
     }
 
     /**
@@ -86,7 +89,7 @@ class UserProfileResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserProfile createUpdatedEntity() {
-        return new UserProfile().nickname(UPDATED_NICKNAME).avatarUrl(UPDATED_AVATAR_URL);
+        return new UserProfile().nickname(UPDATED_NICKNAME).avatarUrl(UPDATED_AVATAR_URL).sessionId(UPDATED_SESSION_ID);
     }
 
     @BeforeEach
@@ -174,7 +177,8 @@ class UserProfileResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userProfile.getId().intValue())))
             .andExpect(jsonPath("$.[*].nickname").value(hasItem(DEFAULT_NICKNAME)))
-            .andExpect(jsonPath("$.[*].avatarUrl").value(hasItem(DEFAULT_AVATAR_URL)));
+            .andExpect(jsonPath("$.[*].avatarUrl").value(hasItem(DEFAULT_AVATAR_URL)))
+            .andExpect(jsonPath("$.[*].sessionId").value(hasItem(DEFAULT_SESSION_ID)));
     }
 
     @Test
@@ -190,7 +194,8 @@ class UserProfileResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userProfile.getId().intValue()))
             .andExpect(jsonPath("$.nickname").value(DEFAULT_NICKNAME))
-            .andExpect(jsonPath("$.avatarUrl").value(DEFAULT_AVATAR_URL));
+            .andExpect(jsonPath("$.avatarUrl").value(DEFAULT_AVATAR_URL))
+            .andExpect(jsonPath("$.sessionId").value(DEFAULT_SESSION_ID));
     }
 
     @Test

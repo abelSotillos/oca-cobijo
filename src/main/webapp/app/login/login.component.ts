@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { IUserProfile } from 'app/entities/user-profile/user-profile.model';
 
 @Component({
   selector: 'jhi-login',
@@ -15,6 +16,10 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   username = viewChild.required<ElementRef>('username');
 
   authenticationError = signal(false);
+
+  guestForm = new FormGroup({
+    nickname: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+  });
 
   loginForm = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -49,6 +54,16 @@ export default class LoginComponent implements OnInit, AfterViewInit {
         }
       },
       error: () => this.authenticationError.set(true),
+    });
+  }
+
+  loginGuest(): void {
+    const nickname = this.guestForm.get('nickname')!.value;
+    this.loginService.guestLogin(nickname).subscribe({
+      next: (profile: IUserProfile) => {
+        localStorage.setItem('session_id', profile.sessionId ?? '');
+        this.router.navigate(['']);
+      },
     });
   }
 }
