@@ -1,4 +1,10 @@
 jest.mock('app/core/auth/account.service');
+jest.mock('phaser', () => ({
+  Game: jest.fn().mockImplementation(() => ({ destroy: jest.fn() })),
+  Scene: class {},
+  AUTO: 0,
+  GameObjects: { Image: class {} },
+}));
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -54,9 +60,6 @@ describe('Home Component', () => {
       // WHEN
       comp.ngOnInit();
 
-      // THEN
-      expect(comp.account()).toBeNull();
-
       // WHEN
       authenticationState.next(account);
 
@@ -67,7 +70,8 @@ describe('Home Component', () => {
       authenticationState.next(null);
 
       // THEN
-      expect(comp.account()).toBeNull();
+      expect(comp.account()).toEqual(account);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
     });
   });
 

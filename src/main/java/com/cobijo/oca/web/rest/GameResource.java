@@ -4,6 +4,7 @@ import com.cobijo.oca.repository.GameRepository;
 import com.cobijo.oca.service.GameService;
 import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
+import com.cobijo.oca.web.websocket.GameWebsocketService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -42,9 +43,12 @@ public class GameResource {
 
     private final GameRepository gameRepository;
 
-    public GameResource(GameService gameService, GameRepository gameRepository) {
+    private final GameWebsocketService gameWebsocketService;
+
+    public GameResource(GameService gameService, GameRepository gameRepository, GameWebsocketService gameWebsocketService) {
         this.gameService = gameService;
         this.gameRepository = gameRepository;
+        this.gameWebsocketService = gameWebsocketService;
     }
 
     /**
@@ -61,6 +65,7 @@ public class GameResource {
             throw new BadRequestAlertException("A new game cannot already have an ID", ENTITY_NAME, "idexists");
         }
         gameDTO = gameService.save(gameDTO);
+        gameWebsocketService.sendGameUpdate(gameDTO);
         return ResponseEntity.created(new URI("/api/games/" + gameDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, gameDTO.getId().toString()))
             .body(gameDTO);
@@ -94,6 +99,7 @@ public class GameResource {
         }
 
         gameDTO = gameService.update(gameDTO);
+        gameWebsocketService.sendGameUpdate(gameDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, gameDTO.getId().toString()))
             .body(gameDTO);
@@ -128,6 +134,7 @@ public class GameResource {
         }
 
         Optional<GameDTO> result = gameService.partialUpdate(gameDTO);
+        result.ifPresent(gameWebsocketService::sendGameUpdate);
 
         return ResponseUtil.wrapOrNotFound(
             result,
