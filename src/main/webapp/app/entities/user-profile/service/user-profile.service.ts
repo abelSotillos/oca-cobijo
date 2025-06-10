@@ -39,6 +39,10 @@ export class UserProfileService {
     return this.http.get<IUserProfile>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findBySession(sessionId: string): Observable<EntityResponseType> {
+    return this.http.get<IUserProfile>(`${this.resourceUrl}/session/${sessionId}`, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IUserProfile[]>(this.resourceUrl, { params: options, observe: 'response' });

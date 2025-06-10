@@ -9,6 +9,7 @@ import { StateStorageService } from './state-storage.service';
 
 type JwtToken = {
   id_token: string;
+  session_id?: string;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -36,5 +37,8 @@ export class AuthServerProvider {
 
   private authenticateSuccess(response: JwtToken, rememberMe: boolean): void {
     this.stateStorageService.storeAuthenticationToken(response.id_token, rememberMe);
+    if (response.session_id) {
+      localStorage.setItem('session_id', response.session_id);
+    }
   }
 }
