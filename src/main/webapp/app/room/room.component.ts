@@ -34,7 +34,7 @@ export default class RoomComponent implements OnInit {
         if (sessionId) {
           this.userProfileService.findBySession(sessionId).subscribe(profileRes => {
             const profile = profileRes.body;
-            if (profile?.id != null) {
+            if (profile?.id) {
               const player: NewPlayerGame = {
                 id: null,
                 positionx: 0,

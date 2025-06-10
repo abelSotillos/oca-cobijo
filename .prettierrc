@@ -8,6 +8,7 @@ plugins:
   - prettier-plugin-packagejson
   - prettier-plugin-java
 overrides:
-  - files: "*.java"
+  - files: '*.java'
     options:
       tabWidth: 4
+endOfLine: auto

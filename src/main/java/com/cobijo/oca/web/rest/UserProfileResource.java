@@ -2,8 +2,8 @@ package com.cobijo.oca.web.rest;
 
 import com.cobijo.oca.repository.UserProfileRepository;
 import com.cobijo.oca.service.UserProfileService;
-import com.cobijo.oca.service.dto.UserProfileDTO;
 import com.cobijo.oca.service.dto.NicknameDTO;
+import com.cobijo.oca.service.dto.UserProfileDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

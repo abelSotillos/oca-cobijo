@@ -1,6 +1,7 @@
 package com.cobijo.oca.service.dto;
 
 public class NicknameDTO {
+
     private String nickname;
 
     public String getNickname() {

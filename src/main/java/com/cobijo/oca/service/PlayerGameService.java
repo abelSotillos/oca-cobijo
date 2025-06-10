@@ -93,11 +93,7 @@ public class PlayerGameService {
     @Transactional(readOnly = true)
     public List<PlayerGameDTO> findByGameId(Long gameId) {
         LOG.debug("Request to get PlayerGames by game : {}", gameId);
-        return playerGameRepository
-            .findByGameId(gameId)
-            .stream()
-            .map(playerGameMapper::toDto)
-            .collect(Collectors.toList());
+        return playerGameRepository.findByGameId(gameId).stream().map(playerGameMapper::toDto).collect(Collectors.toList());
     }
 
     /**

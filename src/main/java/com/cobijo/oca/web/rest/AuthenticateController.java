@@ -3,9 +3,9 @@ package com.cobijo.oca.web.rest;
 import static com.cobijo.oca.security.SecurityUtils.AUTHORITIES_KEY;
 import static com.cobijo.oca.security.SecurityUtils.JWT_ALGORITHM;
 
+import com.cobijo.oca.service.UserProfileService;
 import com.cobijo.oca.web.rest.vm.LoginVM;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.cobijo.oca.service.UserProfileService;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
@@ -50,7 +50,11 @@ public class AuthenticateController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder, UserProfileService userProfileService) {
+    public AuthenticateController(
+        JwtEncoder jwtEncoder,
+        AuthenticationManagerBuilder authenticationManagerBuilder,
+        UserProfileService userProfileService
+    ) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userProfileService = userProfileService;

@@ -11,6 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface PlayerGameRepository extends JpaRepository<PlayerGame, Long> {
-
     List<PlayerGame> findByGameId(Long gameId);
 }
