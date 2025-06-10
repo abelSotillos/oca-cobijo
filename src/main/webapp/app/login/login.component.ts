@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { IUserProfile } from 'app/entities/user-profile/user-profile.model';
 
 @Component({
@@ -30,6 +31,7 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   private readonly accountService = inject(AccountService);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  private readonly stateStorageService = inject(StateStorageService);
 
   ngOnInit(): void {
     // if already authenticated then navigate to home page
@@ -62,7 +64,13 @@ export default class LoginComponent implements OnInit, AfterViewInit {
     this.loginService.guestLogin(nickname).subscribe({
       next: (profile: IUserProfile) => {
         localStorage.setItem('session_id', profile.sessionId ?? '');
-        this.router.navigate(['']);
+        const previousUrl = this.stateStorageService.getUrl();
+        if (previousUrl) {
+          this.stateStorageService.clearUrl();
+          this.router.navigateByUrl(previousUrl);
+        } else {
+          this.router.navigate(['']);
+        }
       },
     });
   }
