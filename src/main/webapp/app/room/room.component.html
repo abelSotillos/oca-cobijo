@@ -2,4 +2,4 @@
   <label>Enlace para compartir:</label>
   <input type="text" class="form-control" [value]="shareLink()" readonly />
 </div>
-<jhi-phaser-game *ngIf="game()"></jhi-phaser-game>
+<jhi-phaser-game *ngIf="game()" [game]="game()"></jhi-phaser-game>

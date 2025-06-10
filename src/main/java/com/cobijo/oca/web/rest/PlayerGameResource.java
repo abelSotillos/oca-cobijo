@@ -149,6 +149,13 @@ public class PlayerGameResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<List<PlayerGameDTO>> getPlayerGamesByGame(@PathVariable("gameId") Long gameId) {
+        LOG.debug("REST request to get PlayerGames by game : {}", gameId);
+        List<PlayerGameDTO> list = playerGameService.findByGameId(gameId);
+        return ResponseEntity.ok().body(list);
+    }
+
     /**
      * {@code GET  /player-games/:id} : get the "id" playerGame.
      *

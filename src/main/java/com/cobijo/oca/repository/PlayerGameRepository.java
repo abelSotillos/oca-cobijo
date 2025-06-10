@@ -1,6 +1,7 @@
 package com.cobijo.oca.repository;
 
 import com.cobijo.oca.domain.PlayerGame;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,7 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PlayerGameRepository extends JpaRepository<PlayerGame, Long> {}
+public interface PlayerGameRepository extends JpaRepository<PlayerGame, Long> {
+
+    List<PlayerGame> findByGameId(Long gameId);
+}

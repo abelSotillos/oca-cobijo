@@ -44,6 +44,10 @@ export class PlayerGameService {
     return this.http.get<IPlayerGame[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  findByGame(gameId: number): Observable<IPlayerGame[]> {
+    return this.http.get<IPlayerGame[]>(`${this.resourceUrl}/game/${gameId}`);
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
@@ -62,7 +66,9 @@ export class PlayerGameService {
   ): Type[] {
     const playerGames: Type[] = playerGamesToCheck.filter(isPresent);
     if (playerGames.length > 0) {
-      const playerGameCollectionIdentifiers = playerGameCollection.map(playerGameItem => this.getPlayerGameIdentifier(playerGameItem));
+      const playerGameCollectionIdentifiers = playerGameCollection.map(playerGameItem =>
+        this.getPlayerGameIdentifier(playerGameItem)
+      );
       const playerGamesToAdd = playerGames.filter(playerGameItem => {
         const playerGameIdentifier = this.getPlayerGameIdentifier(playerGameItem);
         if (playerGameCollectionIdentifiers.includes(playerGameIdentifier)) {
