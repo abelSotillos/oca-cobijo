@@ -7,6 +7,7 @@ import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { PhaserGameComponent } from '../phaser-game/phaser-game.component';
+import { GameService } from 'app/entities/game/service/game.service';
 
 @Component({
   selector: 'jhi-home',
@@ -21,6 +22,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
   private readonly accountService = inject(AccountService);
   private readonly router = inject(Router);
+  private readonly gameService = inject(GameService);
 
   ngOnInit(): void {
     this.accountService
@@ -37,6 +39,15 @@ export default class HomeComponent implements OnInit, OnDestroy {
 
   login(): void {
     this.router.navigate(['/login']);
+  }
+
+  createRoom(): void {
+    this.gameService.createRoom().subscribe(res => {
+      const code = res.body?.code;
+      if (code) {
+        this.router.navigate(['/room', code]);
+      }
+    });
   }
 
   ngOnDestroy(): void {

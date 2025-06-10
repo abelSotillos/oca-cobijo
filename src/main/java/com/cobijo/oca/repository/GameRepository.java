@@ -27,4 +27,10 @@ public interface GameRepository extends GameRepositoryWithBagRelationships, JpaR
     default Page<Game> findAllWithEagerRelationships(Pageable pageable) {
         return this.fetchBagRelationships(this.findAll(pageable));
     }
+
+    Optional<Game> findOneByCode(String code);
+
+    default Optional<Game> findOneWithEagerRelationshipsByCode(String code) {
+        return this.fetchBagRelationships(this.findOneByCode(code));
+    }
 }

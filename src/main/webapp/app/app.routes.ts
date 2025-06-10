@@ -34,6 +34,10 @@ const routes: Routes = [
     title: 'Inicio de Sesión',
   },
   {
+    path: 'room',
+    loadChildren: () => import('./room/room.routes'),
+  },
+  {
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },

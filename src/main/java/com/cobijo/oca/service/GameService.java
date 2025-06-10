@@ -1,10 +1,12 @@
 package com.cobijo.oca.service;
 
 import com.cobijo.oca.domain.Game;
+import com.cobijo.oca.domain.enumeration.GameStatus;
 import com.cobijo.oca.repository.GameRepository;
 import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.mapper.GameMapper;
 import java.util.Optional;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -52,6 +54,14 @@ public class GameService {
     public GameDTO update(GameDTO gameDTO) {
         LOG.debug("Request to update Game : {}", gameDTO);
         Game game = gameMapper.toEntity(gameDTO);
+        game = gameRepository.save(game);
+        return gameMapper.toDto(game);
+    }
+
+    public GameDTO createRoom() {
+        Game game = new Game();
+        game.setCode(RandomStringUtils.randomAlphanumeric(6));
+        game.setStatus(GameStatus.WAITING);
         game = gameRepository.save(game);
         return gameMapper.toDto(game);
     }
@@ -107,6 +117,12 @@ public class GameService {
     public Optional<GameDTO> findOne(Long id) {
         LOG.debug("Request to get Game : {}", id);
         return gameRepository.findOneWithEagerRelationships(id).map(gameMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<GameDTO> findOneByCode(String code) {
+        LOG.debug("Request to get Game by code : {}", code);
+        return gameRepository.findOneWithEagerRelationshipsByCode(code).map(gameMapper::toDto);
     }
 
     /**

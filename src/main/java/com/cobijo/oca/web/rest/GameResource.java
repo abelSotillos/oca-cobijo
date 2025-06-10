@@ -71,6 +71,12 @@ public class GameResource {
             .body(gameDTO);
     }
 
+    @PostMapping("/create-room")
+    public ResponseEntity<GameDTO> createRoom() throws URISyntaxException {
+        GameDTO gameDTO = gameService.createRoom();
+        return ResponseEntity.created(new URI("/api/games/" + gameDTO.getId())).body(gameDTO);
+    }
+
     /**
      * {@code PUT  /games/:id} : Updates an existing game.
      *
@@ -175,6 +181,13 @@ public class GameResource {
     public ResponseEntity<GameDTO> getGame(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Game : {}", id);
         Optional<GameDTO> gameDTO = gameService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(gameDTO);
+    }
+
+    @GetMapping("/code/{code}")
+    public ResponseEntity<GameDTO> getGameByCode(@PathVariable("code") String code) {
+        LOG.debug("REST request to get Game by code : {}", code);
+        Optional<GameDTO> gameDTO = gameService.findOneByCode(code);
         return ResponseUtil.wrapOrNotFound(gameDTO);
     }
 
