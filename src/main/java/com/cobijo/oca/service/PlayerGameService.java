@@ -7,7 +7,9 @@ import com.cobijo.oca.domain.enumeration.GameStatus;
 import com.cobijo.oca.repository.PlayerGameRepository;
 import com.cobijo.oca.repository.GameRepository;
 import com.cobijo.oca.repository.UserProfileRepository;
+import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
+import com.cobijo.oca.service.mapper.GameMapper;
 import com.cobijo.oca.service.mapper.PlayerGameMapper;
 import java.util.List;
 import java.util.Optional;
@@ -36,16 +38,20 @@ public class PlayerGameService {
 
     private final PlayerGameMapper playerGameMapper;
 
+    private final GameMapper gameMapper;
+
     public PlayerGameService(
         PlayerGameRepository playerGameRepository,
         GameRepository gameRepository,
         UserProfileRepository userProfileRepository,
-        PlayerGameMapper playerGameMapper
+        PlayerGameMapper playerGameMapper,
+        GameMapper gameMapper
     ) {
         this.playerGameRepository = playerGameRepository;
         this.gameRepository = gameRepository;
         this.userProfileRepository = userProfileRepository;
         this.playerGameMapper = playerGameMapper;
+        this.gameMapper = gameMapper;
     }
 
     /**
@@ -109,7 +115,11 @@ public class PlayerGameService {
     @Transactional(readOnly = true)
     public List<PlayerGameDTO> findByGameId(Long gameId) {
         LOG.debug("Request to get PlayerGames by game : {}", gameId);
-        return playerGameRepository.findByGameId(gameId).stream().map(playerGameMapper::toDto).collect(Collectors.toList());
+        return playerGameRepository
+            .findByGameIdOrderByOrder(gameId)
+            .stream()
+            .map(playerGameMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     public PlayerGameDTO join(Long gameId, Long userProfileId) {
@@ -128,7 +138,7 @@ public class PlayerGameService {
         pg.setUserProfile(userProfile);
         pg.setPositionx(0);
         pg.setPositiony(0);
-        pg.setOrder(playerGameRepository.findByGameId(gameId).size());
+        pg.setOrder(playerGameRepository.findByGameIdOrderByOrder(gameId).size());
         pg.setIsWinner(false);
         pg = playerGameRepository.save(pg);
         return playerGameMapper.toDto(pg);
@@ -154,5 +164,32 @@ public class PlayerGameService {
     public void delete(Long id) {
         LOG.debug("Request to delete PlayerGame : {}", id);
         playerGameRepository.deleteById(id);
+    }
+
+    public GameDTO rollDice(Long gameId) {
+        LOG.debug("Request to roll dice for game : {}", gameId);
+        Game game = gameRepository.findById(gameId).orElseThrow();
+        List<PlayerGame> players = playerGameRepository.findByGameIdOrderByOrder(gameId);
+        if (players.isEmpty()) {
+            throw new IllegalStateException("No players in game");
+        }
+
+        int currentTurn = game.getCurrentTurn() == null ? 0 : game.getCurrentTurn();
+        currentTurn = currentTurn % players.size();
+
+        PlayerGame currentPlayer = players.get(currentTurn);
+        int dice = (int) (Math.random() * 6) + 1;
+        int boardCols = 8;
+        int boardRows = 8;
+        int index = currentPlayer.getPositiony() * boardCols + currentPlayer.getPositionx();
+        int newIndex = (index + dice) % (boardCols * boardRows);
+        currentPlayer.setPositionx(newIndex % boardCols);
+        currentPlayer.setPositiony(newIndex / boardCols);
+        playerGameRepository.save(currentPlayer);
+
+        game.setCurrentTurn((currentTurn + 1) % players.size());
+        game = gameRepository.save(game);
+
+        return gameMapper.toDto(game);
     }
 }

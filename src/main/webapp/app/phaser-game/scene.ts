@@ -55,6 +55,15 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
+  setPlayerPosition(index: number, position: number): void {
+    const player = this.players[index];
+    player.position = position % (BOARD_ROWS * BOARD_COLS);
+    const { row, col } = this.indexToCoord(player.position);
+    if (player.sprite) {
+      player.sprite.setPosition(col * TILE_SIZE + TILE_SIZE / 2, row * TILE_SIZE + TILE_SIZE / 2);
+    }
+  }
+
   private indexToCoord(index: number): { row: number; col: number } {
     const row = Math.floor(index / BOARD_COLS);
     const col = index % BOARD_COLS;

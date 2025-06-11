@@ -52,6 +52,10 @@ export class GameService {
     return this.http.post<IGame>(`${this.resourceUrl}/${id}/start`, {}, { observe: 'response' });
   }
 
+  roll(id: number): Observable<EntityResponseType> {
+    return this.http.post<IGame>(`${this.resourceUrl}/${id}/roll`, {}, { observe: 'response' });
+  }
+
   findByCode(code: string): Observable<EntityResponseType> {
     return this.http.get<IGame>(`${this.resourceUrl}/code/${code}`, { observe: 'response' });
   }

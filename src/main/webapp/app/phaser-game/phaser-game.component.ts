@@ -4,6 +4,7 @@ import { MainScene, PlayerToken } from './scene';
 import { IGame } from 'app/entities/game/game.model';
 import { IPlayerGame } from 'app/entities/player-game/player-game.model';
 import { PlayerGameService } from 'app/entities/player-game/service/player-game.service';
+import { GameService } from 'app/entities/game/service/game.service';
 
 @Component({
   selector: 'jhi-phaser-game',
@@ -22,11 +23,13 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
   private scene?: MainScene;
 
   private readonly playerGameService = inject(PlayerGameService);
+  private readonly gameService = inject(GameService);
 
   ngOnInit(): void {
     if (!this.game?.id) {
       return;
     }
+    this.currentTurn = this.game.currentTurn ?? 0;
     this.playerGameService.findByGame(this.game.id).subscribe(players => {
       this.players = players;
       this.startGame();
@@ -34,12 +37,23 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
   }
 
   rollDice(): void {
-    if (!this.scene || this.players.length === 0) {
+    if (!this.scene || this.players.length === 0 || !this.game?.id) {
       return;
     }
-    this.diceValue = Phaser.Math.Between(1, 6);
-    this.scene.movePlayer(this.currentTurn, this.diceValue);
-    this.currentTurn = (this.currentTurn + 1) % this.players.length;
+    this.gameService.roll(this.game.id).subscribe(res => {
+      const updatedGame = res.body;
+      if (!updatedGame) {
+        return;
+      }
+      this.currentTurn = updatedGame.currentTurn ?? 0;
+      this.playerGameService.findByGame(updatedGame.id!).subscribe(players => {
+        this.players = players;
+        players.forEach((p, idx) => {
+          const pos = (p.positiony ?? 0) * 8 + (p.positionx ?? 0);
+          this.scene!.setPlayerPosition(idx, pos);
+        });
+      });
+    });
   }
 
   ngOnDestroy(): void {
@@ -50,7 +64,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
     const tokens: PlayerToken[] = this.players.map(p => ({
       id: p.id,
       color: Phaser.Display.Color.RandomRGB().color,
-      position: 0,
+      position: (p.positiony ?? 0) * 8 + (p.positionx ?? 0),
     }));
     this.scene = new MainScene(tokens);
     const config: Phaser.Types.Core.GameConfig = {
