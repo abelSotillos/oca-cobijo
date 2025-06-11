@@ -2,4 +2,12 @@
   <label>Enlace para compartir:</label>
   <input type="text" class="form-control" [value]="shareLink()" readonly />
 </div>
+
+<ul class="list-group mb-3">
+  <li *ngFor="let player of players()" class="list-group-item">
+    {{ player.userProfile?.nickname }}
+  </li>
+</ul>
+
+<button *ngIf="game() && game()!.status === 'WAITING'" class="btn btn-success mb-3" (click)="startGame()">Iniciar partida</button>
 <jhi-phaser-game *ngIf="game() && game()!.status === 'IN_PROGRESS'" [game]="game()"></jhi-phaser-game>

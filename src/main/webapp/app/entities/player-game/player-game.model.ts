@@ -8,7 +8,7 @@ export interface IPlayerGame {
   order?: number | null;
   isWinner?: boolean | null;
   game?: Pick<IGame, 'id'> | null;
-  userProfile?: Pick<IUserProfile, 'id'> | null;
+  userProfile?: IUserProfile | null;
 }
 
 export type NewPlayerGame = Omit<IPlayerGame, 'id'> & { id: null };

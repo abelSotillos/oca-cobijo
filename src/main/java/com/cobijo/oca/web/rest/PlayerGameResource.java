@@ -1,9 +1,12 @@
 package com.cobijo.oca.web.rest;
 
 import com.cobijo.oca.repository.PlayerGameRepository;
+import com.cobijo.oca.service.GameService;
 import com.cobijo.oca.service.PlayerGameService;
+import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
+import com.cobijo.oca.web.websocket.GameWebsocketService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
@@ -42,9 +45,20 @@ public class PlayerGameResource {
 
     private final PlayerGameRepository playerGameRepository;
 
-    public PlayerGameResource(PlayerGameService playerGameService, PlayerGameRepository playerGameRepository) {
+    private final GameService gameService;
+
+    private final GameWebsocketService gameWebsocketService;
+
+    public PlayerGameResource(
+        PlayerGameService playerGameService,
+        PlayerGameRepository playerGameRepository,
+        GameService gameService,
+        GameWebsocketService gameWebsocketService
+    ) {
         this.playerGameService = playerGameService;
         this.playerGameRepository = playerGameRepository;
+        this.gameService = gameService;
+        this.gameWebsocketService = gameWebsocketService;
     }
 
     /**
@@ -61,6 +75,11 @@ public class PlayerGameResource {
             throw new BadRequestAlertException("A new playerGame cannot already have an ID", ENTITY_NAME, "idexists");
         }
         playerGameDTO = playerGameService.save(playerGameDTO);
+        if (playerGameDTO.getGame() != null && playerGameDTO.getGame().getId() != null) {
+            Long gameId = playerGameDTO.getGame().getId();
+            Optional<GameDTO> gameDTO = gameService.findOne(gameId);
+            gameDTO.ifPresent(gameWebsocketService::sendGameUpdate);
+        }
         return ResponseEntity.created(new URI("/api/player-games/" + playerGameDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, playerGameDTO.getId().toString()))
             .body(playerGameDTO);

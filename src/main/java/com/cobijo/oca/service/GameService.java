@@ -66,6 +66,14 @@ public class GameService {
         return gameMapper.toDto(game);
     }
 
+    public GameDTO startGame(Long id) {
+        LOG.debug("Request to start Game : {}", id);
+        Game game = gameRepository.findById(id).orElseThrow();
+        game.setStatus(GameStatus.IN_PROGRESS);
+        game = gameRepository.save(game);
+        return gameMapper.toDto(game);
+    }
+
     /**
      * Partially update a game.
      *

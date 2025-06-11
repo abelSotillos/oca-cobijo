@@ -77,6 +77,14 @@ public class GameResource {
         return ResponseEntity.created(new URI("/api/games/" + gameDTO.getId())).body(gameDTO);
     }
 
+    @PostMapping("/{id}/start")
+    public ResponseEntity<GameDTO> startGame(@PathVariable("id") Long id) {
+        LOG.debug("REST request to start Game : {}", id);
+        GameDTO gameDTO = gameService.startGame(id);
+        gameWebsocketService.sendGameUpdate(gameDTO);
+        return ResponseEntity.ok().body(gameDTO);
+    }
+
     /**
      * {@code PUT  /games/:id} : Updates an existing game.
      *
