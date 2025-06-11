@@ -5,6 +5,7 @@ import com.cobijo.oca.service.GameService;
 import com.cobijo.oca.service.PlayerGameService;
 import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
+import com.cobijo.oca.service.dto.JoinGameDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
 import com.cobijo.oca.web.websocket.GameWebsocketService;
 import jakarta.validation.Valid;
@@ -83,6 +84,18 @@ public class PlayerGameResource {
         return ResponseEntity.created(new URI("/api/player-games/" + playerGameDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, playerGameDTO.getId().toString()))
             .body(playerGameDTO);
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<PlayerGameDTO> joinGame(@Valid @RequestBody JoinGameDTO joinGameDTO) {
+        LOG.debug("REST request to join game : {}", joinGameDTO);
+        PlayerGameDTO playerGameDTO = playerGameService.join(joinGameDTO.getGameId(), joinGameDTO.getUserProfileId());
+        if (playerGameDTO.getGame() != null && playerGameDTO.getGame().getId() != null) {
+            Long gameId = playerGameDTO.getGame().getId();
+            Optional<GameDTO> gameDTO = gameService.findOne(gameId);
+            gameDTO.ifPresent(gameWebsocketService::sendGameUpdate);
+        }
+        return ResponseEntity.ok(playerGameDTO);
     }
 
     /**

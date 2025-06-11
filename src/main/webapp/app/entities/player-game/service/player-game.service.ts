@@ -48,6 +48,10 @@ export class PlayerGameService {
     return this.http.get<IPlayerGame[]>(`${this.resourceUrl}/game/${gameId}`);
   }
 
+  join(data: { gameId: number; userProfileId: number }): Observable<IPlayerGame> {
+    return this.http.post<IPlayerGame>(`${this.resourceUrl}/join`, data);
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
