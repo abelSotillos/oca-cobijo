@@ -12,4 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlayerGameRepository extends JpaRepository<PlayerGame, Long> {
     List<PlayerGame> findByGameId(Long gameId);
+
+    Optional<PlayerGame> findByGameIdAndUserProfileId(Long gameId, Long userProfileId);
 }

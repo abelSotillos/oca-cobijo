@@ -1,7 +1,12 @@
 package com.cobijo.oca.service;
 
 import com.cobijo.oca.domain.PlayerGame;
+import com.cobijo.oca.domain.Game;
+import com.cobijo.oca.domain.UserProfile;
+import com.cobijo.oca.domain.enumeration.GameStatus;
 import com.cobijo.oca.repository.PlayerGameRepository;
+import com.cobijo.oca.repository.GameRepository;
+import com.cobijo.oca.repository.UserProfileRepository;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
 import com.cobijo.oca.service.mapper.PlayerGameMapper;
 import java.util.List;
@@ -25,10 +30,21 @@ public class PlayerGameService {
 
     private final PlayerGameRepository playerGameRepository;
 
+    private final GameRepository gameRepository;
+
+    private final UserProfileRepository userProfileRepository;
+
     private final PlayerGameMapper playerGameMapper;
 
-    public PlayerGameService(PlayerGameRepository playerGameRepository, PlayerGameMapper playerGameMapper) {
+    public PlayerGameService(
+        PlayerGameRepository playerGameRepository,
+        GameRepository gameRepository,
+        UserProfileRepository userProfileRepository,
+        PlayerGameMapper playerGameMapper
+    ) {
         this.playerGameRepository = playerGameRepository;
+        this.gameRepository = gameRepository;
+        this.userProfileRepository = userProfileRepository;
         this.playerGameMapper = playerGameMapper;
     }
 
@@ -94,6 +110,28 @@ public class PlayerGameService {
     public List<PlayerGameDTO> findByGameId(Long gameId) {
         LOG.debug("Request to get PlayerGames by game : {}", gameId);
         return playerGameRepository.findByGameId(gameId).stream().map(playerGameMapper::toDto).collect(Collectors.toList());
+    }
+
+    public PlayerGameDTO join(Long gameId, Long userProfileId) {
+        LOG.debug("Request to join game {} with user {}", gameId, userProfileId);
+        Game game = gameRepository.findById(gameId).orElseThrow();
+        if (game.getStatus() != GameStatus.WAITING) {
+            throw new IllegalStateException("Game already started");
+        }
+        Optional<PlayerGame> existing = playerGameRepository.findByGameIdAndUserProfileId(gameId, userProfileId);
+        if (existing.isPresent()) {
+            return playerGameMapper.toDto(existing.get());
+        }
+        UserProfile userProfile = userProfileRepository.findById(userProfileId).orElseThrow();
+        PlayerGame pg = new PlayerGame();
+        pg.setGame(game);
+        pg.setUserProfile(userProfile);
+        pg.setPositionx(0);
+        pg.setPositiony(0);
+        pg.setOrder(playerGameRepository.findByGameId(gameId).size());
+        pg.setIsWinner(false);
+        pg = playerGameRepository.save(pg);
+        return playerGameMapper.toDto(pg);
     }
 
     /**

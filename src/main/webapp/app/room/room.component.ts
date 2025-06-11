@@ -6,7 +6,7 @@ import { GameService } from '../entities/game/service/game.service';
 import { IGame } from '../entities/game/game.model';
 import { UserProfileService } from '../entities/user-profile/service/user-profile.service';
 import { PlayerGameService } from '../entities/player-game/service/player-game.service';
-import { IPlayerGame, NewPlayerGame } from '../entities/player-game/player-game.model';
+import { IPlayerGame } from '../entities/player-game/player-game.model';
 import { TrackerService } from '../core/tracker/tracker.service';
 
 @Component({
@@ -34,20 +34,11 @@ export default class RoomComponent implements OnInit {
       this.game.set(game);
       if (game) {
         const sessionId = localStorage.getItem('session_id');
-        if (sessionId) {
+        if (sessionId && game.status === 'WAITING') {
           this.userProfileService.findBySession(sessionId).subscribe(profileRes => {
             const profile = profileRes.body;
             if (profile?.id) {
-              const player: NewPlayerGame = {
-                id: null,
-                positionx: 0,
-                positiony: 0,
-                order: 0,
-                isWinner: false,
-                game: { id: game.id },
-                userProfile: { id: profile.id },
-              };
-              this.playerGameService.create(player).subscribe();
+              this.playerGameService.join({ gameId: game.id!, userProfileId: profile.id }).subscribe();
             }
           });
         }
