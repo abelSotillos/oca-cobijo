@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
 import Phaser from 'phaser';
 import { MainScene, PlayerToken } from './scene';
 import { IGame } from 'app/entities/game/game.model';
@@ -12,12 +12,13 @@ import { GameService } from 'app/entities/game/service/game.service';
   templateUrl: './phaser-game.component.html',
   styleUrl: './phaser-game.component.scss',
 })
-export class PhaserGameComponent implements OnDestroy, OnInit {
+export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   @Input({ required: true }) game: IGame | null = null;
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
 
   diceValue = 0;
   currentTurn = 0;
+  private myIndex = -1;
   private players: IPlayerGame[] = [];
   private phaserGame?: Phaser.Game;
   private scene?: MainScene;
@@ -29,11 +30,14 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
     if (!this.game?.id) {
       return;
     }
-    this.currentTurn = this.game.currentTurn ?? 0;
-    this.playerGameService.findByGame(this.game.id).subscribe(players => {
-      this.players = players;
-      this.startGame();
-    });
+    this.loadPlayers();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['game'] && this.game?.id) {
+      this.currentTurn = this.game.currentTurn ?? 0;
+      this.loadPlayers();
+    }
   }
 
   rollDice(): void {
@@ -46,13 +50,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
         return;
       }
       this.currentTurn = updatedGame.currentTurn ?? 0;
-      this.playerGameService.findByGame(updatedGame.id).subscribe(players => {
-        this.players = players;
-        players.forEach((p, idx) => {
-          const pos = (p.positiony ?? 0) * 8 + (p.positionx ?? 0);
-          this.scene!.setPlayerPosition(idx, pos);
-        });
-      });
+      this.loadPlayers();
     });
   }
 
@@ -75,5 +73,29 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
       scene: [this.scene],
     };
     this.phaserGame = new Phaser.Game(config);
+  }
+
+  private loadPlayers(): void {
+    if (!this.game?.id) {
+      return;
+    }
+    this.playerGameService.findByGame(this.game.id).subscribe(players => {
+      this.players = players;
+      const sessionId = localStorage.getItem('session_id');
+      this.myIndex = players.findIndex(p => p.userProfile?.sessionId === sessionId);
+
+      if (!this.scene) {
+        this.startGame();
+      } else {
+        players.forEach((p, idx) => {
+          const pos = (p.positiony ?? 0) * 8 + (p.positionx ?? 0);
+          this.scene!.setPlayerPosition(idx, pos);
+        });
+      }
+    });
+  }
+
+  get isMyTurn(): boolean {
+    return this.myIndex === this.currentTurn;
   }
 }
