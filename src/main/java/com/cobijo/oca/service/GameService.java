@@ -5,6 +5,7 @@ import com.cobijo.oca.domain.enumeration.GameStatus;
 import com.cobijo.oca.repository.GameRepository;
 import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.mapper.GameMapper;
+import java.util.List;
 import java.util.Optional;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
@@ -131,6 +132,13 @@ public class GameService {
     public Optional<GameDTO> findOneByCode(String code) {
         LOG.debug("Request to get Game by code : {}", code);
         return gameRepository.findOneWithEagerRelationshipsByCode(code).map(gameMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GameDTO> findActiveByUser(Long userId) {
+        LOG.debug("Request to get active games for user : {}", userId);
+        List<Game> games = gameRepository.findByUserAndStatuses(userId, List.of(GameStatus.WAITING, GameStatus.IN_PROGRESS));
+        return games.stream().map(gameMapper::toDto).toList();
     }
 
     /**

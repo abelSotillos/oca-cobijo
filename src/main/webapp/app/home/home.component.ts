@@ -73,10 +73,8 @@ export default class HomeComponent implements OnInit, OnDestroy {
     this.userProfileService.findBySession(sessionId).subscribe(profileRes => {
       const profile = profileRes.body;
       if (profile?.id != null) {
-        this.gameService.query({ eagerload: true, size: 1000 }).subscribe(res => {
-          const games = res.body ?? [];
-          const filtered = games.filter(g => g.userProfiles?.some(u => u.id === profile.id));
-          this.games.set(filtered);
+        this.gameService.findByUser(profile.id).subscribe(res => {
+          this.games.set(res.body ?? []);
         });
       }
     });
