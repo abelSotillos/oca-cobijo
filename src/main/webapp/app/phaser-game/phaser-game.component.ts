@@ -46,7 +46,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit {
         return;
       }
       this.currentTurn = updatedGame.currentTurn ?? 0;
-      this.playerGameService.findByGame(updatedGame.id!).subscribe(players => {
+      this.playerGameService.findByGame(updatedGame.id).subscribe(players => {
         this.players = players;
         players.forEach((p, idx) => {
           const pos = (p.positiony ?? 0) * 8 + (p.positionx ?? 0);
