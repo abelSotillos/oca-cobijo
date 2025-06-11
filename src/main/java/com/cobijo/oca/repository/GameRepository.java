@@ -36,6 +36,15 @@ public interface GameRepository extends GameRepositoryWithBagRelationships, JpaR
         return this.fetchBagRelationships(this.findOneByCode(code));
     }
 
-    @Query("select distinct g from Game g left join fetch g.userProfiles u where u.id = :userId and g.status in :statuses")
-    List<Game> findByUserAndStatuses(@Param("userId") Long userId, @Param("statuses") List<GameStatus> statuses);
+    @Query(
+        "select distinct g from Game g " +
+        "left join fetch g.userProfiles up " +
+        "join g.playerGames pg " +
+        "join pg.userProfile pgu " +
+        "where pgu.id = :userId and g.status in :statuses"
+    )
+    List<Game> findByUserAndStatuses(
+        @Param("userId") Long userId,
+        @Param("statuses") List<GameStatus> statuses
+    );
 }
