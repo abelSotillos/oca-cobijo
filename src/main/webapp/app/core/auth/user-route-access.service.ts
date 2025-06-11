@@ -25,6 +25,11 @@ export const UserRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapsh
         return false;
       }
 
+      const guestSession = localStorage.getItem('session_id');
+      if (guestSession) {
+        return true;
+      }
+
       stateStorageService.storeUrl(state.url);
       router.navigate(['/login']);
       return false;

@@ -34,6 +34,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (changes['game'] && this.game?.id) {
       this.currentTurn = this.game.currentTurn ?? 0;
       this.loadPlayers();
