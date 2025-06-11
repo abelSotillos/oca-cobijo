@@ -216,6 +216,13 @@ public class GameResource {
         return ResponseUtil.wrapOrNotFound(gameDTO);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<GameDTO>> getActiveGamesByUser(@PathVariable("userId") Long userId) {
+        LOG.debug("REST request to get active games for user : {}", userId);
+        List<GameDTO> list = gameService.findActiveByUser(userId);
+        return ResponseEntity.ok(list);
+    }
+
     /**
      * {@code DELETE  /games/:id} : delete the "id" game.
      *

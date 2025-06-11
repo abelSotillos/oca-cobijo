@@ -60,6 +60,10 @@ export class GameService {
     return this.http.get<IGame>(`${this.resourceUrl}/code/${code}`, { observe: 'response' });
   }
 
+  findByUser(userId: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IGame[]>(`${this.resourceUrl}/user/${userId}`, { observe: 'response' });
+  }
+
   getGameIdentifier(game: Pick<IGame, 'id'>): number {
     return game.id;
   }
