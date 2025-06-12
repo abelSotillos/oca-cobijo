@@ -2,5 +2,5 @@
   <button class="btn btn-primary" (click)="rollDice()" *ngIf="isMyTurn">Tirar dado</button>
   <span class="ms-2" *ngIf="diceValue">Dado: {{ diceValue }}</span>
 </div>
-<div #gameContainer></div>
+<div id="gameContainer" #gameContainer></div>
 <jhi-dice-animation *ngIf="showDice" [value]="diceValue" [rolling]="rolling"></jhi-dice-animation>
