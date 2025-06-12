@@ -20,7 +20,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.image('board', 'content/images/tablero.jpg');
+    this.load.image('board', 'content/images/tablero.png');
   }
 
   create(): void {
@@ -34,8 +34,8 @@ export class MainScene extends Phaser.Scene {
         const x = col * this.tileWidth;
         const y = row * this.tileHeight;
         const color = (row + col) % 2 === 0 ? 0xffffff : 0xcccccc;
-        const rect = this.add.rectangle(x + this.tileWidth / 2, y + this.tileHeight / 2, this.tileWidth, this.tileHeight, color);
-        rect.setStrokeStyle(1, 0x000000);
+        const rect = this.add.rectangle(x + this.tileWidth / 2, y + this.tileHeight / 2, this.tileWidth, this.tileHeight, color, 0.1);
+        rect.setStrokeStyle(1, 0x900001);
       }
     }
     this.players.forEach(p => {
