@@ -97,6 +97,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       return;
     }
     this.playerGameService.findByGame(this.game.id).subscribe(players => {
+      const prevPlayers = this.players;
       this.players = players;
       const sessionId = localStorage.getItem('session_id');
       this.myIndex = players.findIndex(p => p.userProfile?.sessionId === sessionId);
@@ -106,7 +107,19 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       } else {
         players.forEach((p, idx) => {
           const pos = (p.positiony ?? 0) * 8 + (p.positionx ?? 0);
-          this.scene!.setPlayerPosition(idx, pos);
+          if (prevPlayers[idx]) {
+            const oldPos = (prevPlayers[idx].positiony ?? 0) * 8 + (prevPlayers[idx].positionx ?? 0);
+            const total = 8 * 8;
+            let steps = pos - oldPos;
+            if (steps < 0) {
+              steps += total;
+            }
+            if (steps !== 0) {
+              this.scene!.movePlayer(idx, steps);
+            }
+          } else {
+            this.scene!.setPlayerPosition(idx, pos);
+          }
         });
       }
     });
