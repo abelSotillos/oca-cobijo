@@ -5,10 +5,11 @@ import { IGame } from 'app/entities/game/game.model';
 import { IPlayerGame } from 'app/entities/player-game/player-game.model';
 import { PlayerGameService } from 'app/entities/player-game/service/player-game.service';
 import { GameService } from 'app/entities/game/service/game.service';
+import { DiceAnimationComponent } from './dice-animation/dice-animation.component';
 
 @Component({
   selector: 'jhi-phaser-game',
-  imports: [],
+  imports: [DiceAnimationComponent],
   templateUrl: './phaser-game.component.html',
   styleUrl: './phaser-game.component.scss',
 })
@@ -17,6 +18,8 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   @ViewChild('gameContainer', { static: true }) gameContainer!: ElementRef;
 
   diceValue = 0;
+  showDice = false;
+  rolling = false;
   currentTurn = 0;
   private myIndex = -1;
   private players: IPlayerGame[] = [];
@@ -45,14 +48,23 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     if (!this.scene || this.players.length === 0 || !this.game?.id) {
       return;
     }
-    this.gameService.roll(this.game.id).subscribe(res => {
-      const updatedGame = res.body;
-      if (!updatedGame) {
-        return;
-      }
-      this.currentTurn = updatedGame.currentTurn ?? 0;
-      this.loadPlayers();
-    });
+    this.diceValue = Math.floor(Math.random() * 6) + 1;
+    this.showDice = true;
+    this.rolling = true;
+    setTimeout(() => {
+      this.rolling = false;
+      this.gameService.roll(this.game!.id).subscribe(res => {
+        const updatedGame = res.body;
+        if (!updatedGame) {
+          return;
+        }
+        this.currentTurn = updatedGame.currentTurn ?? 0;
+        this.loadPlayers();
+        setTimeout(() => {
+          this.showDice = false;
+        }, 500);
+      });
+    }, 1000);
   }
 
   ngOnDestroy(): void {
