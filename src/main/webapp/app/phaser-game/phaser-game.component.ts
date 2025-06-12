@@ -78,12 +78,16 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       position: (p.positiony ?? 0) * 8 + (p.positionx ?? 0),
     }));
     this.scene = new MainScene(tokens);
+    const containerWidth = this.gameContainer.nativeElement.offsetWidth || window.innerWidth;
+    const width = Math.min(800, containerWidth);
+    const height = width * 0.7;
     const config: Phaser.Types.Core.GameConfig = {
       type: Phaser.AUTO,
-      width: 800,
-      height: 600,
+      width,
+      height,
       parent: this.gameContainer.nativeElement,
       scene: [this.scene],
+      scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
     };
     this.phaserGame = new Phaser.Game(config);
   }
