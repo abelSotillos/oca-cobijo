@@ -11,4 +11,4 @@ overrides:
   - files: '*.java'
     options:
       tabWidth: 4
-endOfLine: auto
+endOfLine: lf

@@ -1,7 +1,11 @@
 import Phaser from 'phaser';
 
-export const BOARD_ROWS = 8;
-export const BOARD_COLS = 8;
+export const VALID_PATH = [
+  [3, 15],
+  [8, 15],
+];
+export const BOARD_ROWS = 16;
+export const BOARD_COLS = 16;
 export const TILE_SIZE = 64; // Default size, will be overridden for responsive layout
 export interface PlayerToken {
   id: number;
