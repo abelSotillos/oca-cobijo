@@ -39,12 +39,24 @@
   font-size: 2rem;
 }
 
-.face.one { transform: rotateX(0deg) rotateY(0deg) translateZ(50px); }
-.face.two { transform: rotateY(90deg) translateZ(50px); }
-.face.three { transform: rotateY(-90deg) translateZ(50px); }
-.face.four { transform: rotateY(180deg) translateZ(50px); }
-.face.five { transform: rotateX(-90deg) translateZ(50px); }
-.face.six { transform: rotateX(90deg) translateZ(50px); }
+.face.one {
+  transform: rotateX(0deg) rotateY(0deg) translateZ(50px);
+}
+.face.two {
+  transform: rotateY(90deg) translateZ(50px);
+}
+.face.three {
+  transform: rotateY(-90deg) translateZ(50px);
+}
+.face.four {
+  transform: rotateY(180deg) translateZ(50px);
+}
+.face.five {
+  transform: rotateX(-90deg) translateZ(50px);
+}
+.face.six {
+  transform: rotateX(90deg) translateZ(50px);
+}
 
 @keyframes roll {
   from {

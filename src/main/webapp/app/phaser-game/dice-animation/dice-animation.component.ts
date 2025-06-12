@@ -23,9 +23,9 @@ export class DiceAnimationComponent {
       case 4:
         return 'rotateY(180deg)';
       case 5:
-        return 'rotateX(-90deg)';
-      case 6:
         return 'rotateX(90deg)';
+      case 6:
+        return 'rotateX(-90deg)';
       default:
         return '';
     }

@@ -7,4 +7,7 @@
   }
 </div>
 <div id="gameContainer" #gameContainer></div>
-<jhi-dice-animation *ngIf="showDice" [value]="diceValue" [rolling]="rolling"></jhi-dice-animation>
+
+@if (showDice) {
+  <jhi-dice-animation [value]="diceValue" [rolling]="rolling"></jhi-dice-animation>
+}

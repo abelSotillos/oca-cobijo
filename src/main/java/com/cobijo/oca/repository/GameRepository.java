@@ -43,8 +43,5 @@ public interface GameRepository extends GameRepositoryWithBagRelationships, JpaR
         "join pg.userProfile pgu " +
         "where pgu.id = :userId and g.status in :statuses"
     )
-    List<Game> findByUserAndStatuses(
-        @Param("userId") Long userId,
-        @Param("statuses") List<GameStatus> statuses
-    );
+    List<Game> findByUserAndStatuses(@Param("userId") Long userId, @Param("statuses") List<GameStatus> statuses);
 }

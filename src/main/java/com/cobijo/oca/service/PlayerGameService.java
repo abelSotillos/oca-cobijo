@@ -1,11 +1,11 @@
 package com.cobijo.oca.service;
 
-import com.cobijo.oca.domain.PlayerGame;
 import com.cobijo.oca.domain.Game;
+import com.cobijo.oca.domain.PlayerGame;
 import com.cobijo.oca.domain.UserProfile;
 import com.cobijo.oca.domain.enumeration.GameStatus;
-import com.cobijo.oca.repository.PlayerGameRepository;
 import com.cobijo.oca.repository.GameRepository;
+import com.cobijo.oca.repository.PlayerGameRepository;
 import com.cobijo.oca.repository.UserProfileRepository;
 import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
@@ -115,11 +115,7 @@ public class PlayerGameService {
     @Transactional(readOnly = true)
     public List<PlayerGameDTO> findByGameId(Long gameId) {
         LOG.debug("Request to get PlayerGames by game : {}", gameId);
-        return playerGameRepository
-            .findByGameIdOrderByOrder(gameId)
-            .stream()
-            .map(playerGameMapper::toDto)
-            .collect(Collectors.toList());
+        return playerGameRepository.findByGameIdOrderByOrder(gameId).stream().map(playerGameMapper::toDto).collect(Collectors.toList());
     }
 
     public PlayerGameDTO join(Long gameId, Long userProfileId) {
