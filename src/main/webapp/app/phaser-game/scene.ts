@@ -1,9 +1,19 @@
 import Phaser from 'phaser';
 
-export const VALID_PATH = [
+export const VALID_PATH: [number, number][] = [
   [3, 15],
   [8, 15],
 ];
+
+export function coordToIndex(row: number, col: number): number {
+  for (let i = 0; i < VALID_PATH.length; i++) {
+    const [r, c] = VALID_PATH[i];
+    if (r === row && c === col) {
+      return i;
+    }
+  }
+  return 0;
+}
 export const BOARD_ROWS = 16;
 export const BOARD_COLS = 16;
 export const TILE_SIZE = 64; // Default size, will be overridden for responsive layout
@@ -55,7 +65,7 @@ export class MainScene extends Phaser.Scene {
 
   movePlayer(index: number, steps: number): void {
     const player = this.players[index];
-    player.position = (player.position + steps) % (BOARD_ROWS * BOARD_COLS);
+    player.position = (player.position + steps) % VALID_PATH.length;
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       this.tweens.add({
@@ -70,7 +80,7 @@ export class MainScene extends Phaser.Scene {
 
   setPlayerPosition(index: number, position: number): void {
     const player = this.players[index];
-    player.position = position % (BOARD_ROWS * BOARD_COLS);
+    player.position = position % VALID_PATH.length;
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       player.sprite.setPosition(col * this.tileWidth + this.tileWidth / 2, row * this.tileHeight + this.tileHeight / 2);
@@ -78,8 +88,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private indexToCoord(index: number): { row: number; col: number } {
-    const row = Math.floor(index / BOARD_COLS);
-    const col = index % BOARD_COLS;
+    const [row, col] = VALID_PATH[index % VALID_PATH.length];
     return { row, col };
   }
 }
