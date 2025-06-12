@@ -51,7 +51,6 @@ export default class LoginComponent implements OnInit, AfterViewInit {
       next: () => {
         this.authenticationError.set(false);
         if (!this.router.getCurrentNavigation()) {
-          // There were no routing during login (eg from navigationToStoredUrl)
           this.router.navigate(['']);
         }
       },

@@ -21,14 +21,6 @@ export default class MainComponent implements OnInit {
   ngOnInit(): void {
     // try to log in automatically
     this.accountService.identity().subscribe();
-    this.accountService.identity().subscribe(res => {
-      if (res === null) {
-        this.router.navigate(['/login']);
-        this.isLoggin = true;
-      } else {
-        this.isLoggin = false;
-      }
-    });
     this.router.events.subscribe({
       next: () => {
         if (this.router.url === '/login' || this.router.url === '/account/register' || this.router.url.includes('/account/reset')) {
