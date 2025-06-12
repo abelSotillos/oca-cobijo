@@ -30,6 +30,8 @@ public class PlayerGameService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PlayerGameService.class);
 
+    private static final int[][] VALID_PATH = { { 3, 15 }, { 8, 15 } };
+
     private final PlayerGameRepository playerGameRepository;
 
     private final GameRepository gameRepository;
@@ -52,6 +54,15 @@ public class PlayerGameService {
         this.userProfileRepository = userProfileRepository;
         this.playerGameMapper = playerGameMapper;
         this.gameMapper = gameMapper;
+    }
+
+    private int coordToIndex(int row, int col) {
+        for (int i = 0; i < VALID_PATH.length; i++) {
+            if (VALID_PATH[i][0] == row && VALID_PATH[i][1] == col) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -132,8 +143,8 @@ public class PlayerGameService {
         PlayerGame pg = new PlayerGame();
         pg.setGame(game);
         pg.setUserProfile(userProfile);
-        pg.setPositionx(0);
-        pg.setPositiony(0);
+        pg.setPositiony(VALID_PATH[0][0]);
+        pg.setPositionx(VALID_PATH[0][1]);
         pg.setOrder(playerGameRepository.findByGameIdOrderByOrder(gameId).size());
         pg.setIsWinner(false);
         pg = playerGameRepository.save(pg);
@@ -175,12 +186,10 @@ public class PlayerGameService {
 
         PlayerGame currentPlayer = players.get(currentTurn);
         int dice = (int) (Math.random() * 6) + 1;
-        int boardCols = 8;
-        int boardRows = 8;
-        int index = currentPlayer.getPositiony() * boardCols + currentPlayer.getPositionx();
-        int newIndex = (index + dice) % (boardCols * boardRows);
-        currentPlayer.setPositionx(newIndex % boardCols);
-        currentPlayer.setPositiony(newIndex / boardCols);
+        int index = coordToIndex(currentPlayer.getPositiony(), currentPlayer.getPositionx());
+        int newIndex = (index + dice) % VALID_PATH.length;
+        currentPlayer.setPositiony(VALID_PATH[newIndex][0]);
+        currentPlayer.setPositionx(VALID_PATH[newIndex][1]);
         playerGameRepository.save(currentPlayer);
 
         game.setCurrentTurn((currentTurn + 1) % players.size());
