@@ -32,11 +32,17 @@ export default class HomeComponent implements OnInit, OnDestroy {
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
       .subscribe(account => {
-        if (account === null) {
-          this.router.navigate(['/login']);
-        } else {
+        if (account !== null) {
           this.account.set(account);
           this.loadGames();
+          return;
+        }
+
+        const sessionId = localStorage.getItem('session_id');
+        if (sessionId) {
+          this.loadGames();
+        } else {
+          this.router.navigate(['/login']);
         }
       });
   }

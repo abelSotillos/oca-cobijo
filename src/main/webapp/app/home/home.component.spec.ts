@@ -7,13 +7,14 @@ jest.mock('phaser', () => ({
 }));
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpResponse, provideHttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject, of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { GameService } from 'app/entities/game/service/game.service';
+import { UserProfileService } from 'app/entities/user-profile/service/user-profile.service';
 
 import HomeComponent from './home.component';
 
@@ -22,6 +23,8 @@ describe('Home Component', () => {
   let fixture: ComponentFixture<HomeComponent>;
   let mockAccountService: AccountService;
   let mockRouter: Router;
+  let mockGameService: GameService;
+  let mockUserProfileService: UserProfileService;
   const account: Account = {
     activated: true,
     authorities: [],
@@ -36,7 +39,7 @@ describe('Home Component', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [HomeComponent],
-      providers: [AccountService, GameService, provideHttpClient()],
+      providers: [AccountService, GameService, UserProfileService, provideHttpClient()],
     })
       .overrideTemplate(HomeComponent, '')
       .compileComponents();
@@ -49,12 +52,18 @@ describe('Home Component', () => {
     mockAccountService.identity = jest.fn(() => of(null));
     mockAccountService.getAuthenticationState = jest.fn(() => of(null));
 
+    mockGameService = TestBed.inject(GameService);
+    jest.spyOn(mockGameService, 'findByUser').mockReturnValue(of(new HttpResponse({ body: [] })));
+
+    mockUserProfileService = TestBed.inject(UserProfileService);
+    jest.spyOn(mockUserProfileService, 'findBySession').mockReturnValue(of(new HttpResponse({ body: { id: 1 } })));
+
     mockRouter = TestBed.inject(Router);
     jest.spyOn(mockRouter, 'navigate').mockImplementation(() => Promise.resolve(true));
   });
 
   describe('ngOnInit', () => {
-    it('Should synchronize account variable with current account', () => {
+    it('Should synchronize account variable with current account and redirect on missing session', () => {
       // GIVEN
       const authenticationState = new Subject<Account | null>();
       mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
@@ -74,6 +83,21 @@ describe('Home Component', () => {
       // THEN
       expect(comp.account()).toEqual(account);
       expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    });
+
+    it('Should not redirect when session id exists', () => {
+      // GIVEN
+      const authenticationState = new Subject<Account | null>();
+      mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
+      localStorage.setItem('session_id', 's1');
+
+      // WHEN
+      comp.ngOnInit();
+      authenticationState.next(null);
+
+      // THEN
+      expect(mockRouter.navigate).not.toHaveBeenCalled();
+      localStorage.removeItem('session_id');
     });
   });
 
