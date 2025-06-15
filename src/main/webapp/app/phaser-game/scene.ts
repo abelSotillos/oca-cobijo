@@ -1,11 +1,31 @@
 import Phaser from 'phaser';
 
-export const VALID_PATH = [
-  [3, 15],
-  [8, 15],
+export const BOARD_COORDS: [number, number][] = [
+  [7, 0],
+  [7, 1],
+  [7, 2],
+  [7, 3],
+  [7, 4],
+  [7, 5],
+  [7, 6],
+  [7, 7],
+  [6, 7],
+  [5, 7],
+  [4, 7],
+  [3, 7],
+  [2, 7],
+  [1, 7],
+  [0, 7],
+  [0, 6],
+  [0, 5],
+  [0, 4],
+  [0, 3],
+  [0, 2],
+  [0, 1],
 ];
-export const BOARD_ROWS = 16;
-export const BOARD_COLS = 16;
+export const BOARD_ROWS = 8;
+export const BOARD_COLS = 8;
+export const BOARD_SIZE = BOARD_COORDS.length;
 export const TILE_SIZE = 64; // Default size, will be overridden for responsive layout
 export interface PlayerToken {
   id: number;
@@ -55,7 +75,7 @@ export class MainScene extends Phaser.Scene {
 
   movePlayer(index: number, steps: number): void {
     const player = this.players[index];
-    player.position = (player.position + steps) % (BOARD_ROWS * BOARD_COLS);
+    player.position = (player.position + steps) % BOARD_SIZE;
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       this.tweens.add({
@@ -70,7 +90,7 @@ export class MainScene extends Phaser.Scene {
 
   setPlayerPosition(index: number, position: number): void {
     const player = this.players[index];
-    player.position = position % (BOARD_ROWS * BOARD_COLS);
+    player.position = position % BOARD_SIZE;
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       player.sprite.setPosition(col * this.tileWidth + this.tileWidth / 2, row * this.tileHeight + this.tileHeight / 2);
@@ -78,8 +98,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private indexToCoord(index: number): { row: number; col: number } {
-    const row = Math.floor(index / BOARD_COLS);
-    const col = index % BOARD_COLS;
+    const [row, col] = BOARD_COORDS[index % BOARD_SIZE];
     return { row, col };
   }
 }
