@@ -23,8 +23,8 @@ export const BOARD_COORDS: [number, number][] = [
   [0, 2],
   [0, 1],
 ];
-export const BOARD_ROWS = 8;
-export const BOARD_COLS = 8;
+export const BOARD_ROWS = 16;
+export const BOARD_COLS = 16;
 export const BOARD_SIZE = BOARD_COORDS.length;
 export const TILE_SIZE = 64; // Default size, will be overridden for responsive layout
 export interface PlayerToken {
@@ -44,7 +44,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.image('board', 'content/images/tablero.png');
+    this.load.image('board', 'content/images/tablero.jpgg');
   }
 
   create(): void {
