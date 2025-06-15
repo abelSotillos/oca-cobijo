@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
 import Phaser from 'phaser';
-import { MainScene, PlayerToken, coordToIndex, VALID_PATH } from './scene';
+import { MainScene, PlayerToken } from './scene';
 import { IGame } from 'app/entities/game/game.model';
 import { IPlayerGame } from 'app/entities/player-game/player-game.model';
 import { PlayerGameService } from 'app/entities/player-game/service/player-game.service';
@@ -75,7 +75,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     const tokens: PlayerToken[] = this.players.map(p => ({
       id: p.id,
       color: Phaser.Display.Color.RandomRGB().color,
-      position: coordToIndex(p.positiony ?? 0, p.positionx ?? 0),
+      position: (p.positiony ?? 0) * 8 + (p.positionx ?? 0),
     }));
     this.scene = new MainScene(tokens);
     const containerWidth = this.gameContainer.nativeElement.offsetWidth || window.innerWidth;
@@ -106,10 +106,10 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
         this.startGame();
       } else {
         players.forEach((p, idx) => {
-          const pos = coordToIndex(p.positiony ?? 0, p.positionx ?? 0);
+          const pos = (p.positiony ?? 0) * 8 + (p.positionx ?? 0);
           if (prevPlayers[idx]) {
-            const oldPos = coordToIndex(prevPlayers[idx].positiony ?? 0, prevPlayers[idx].positionx ?? 0);
-            const total = VALID_PATH.length;
+            const oldPos = (prevPlayers[idx].positiony ?? 0) * 8 + (prevPlayers[idx].positionx ?? 0);
+            const total = 8 * 8;
             let steps = pos - oldPos;
             if (steps < 0) {
               steps += total;
