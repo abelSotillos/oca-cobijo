@@ -34,11 +34,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class PlayerGameResourceIT {
 
-    private static final Integer DEFAULT_POSITIONX = 1;
-    private static final Integer UPDATED_POSITIONX = 2;
-
-    private static final Integer DEFAULT_POSITIONY = 1;
-    private static final Integer UPDATED_POSITIONY = 2;
+    private static final Integer DEFAULT_POSITION = 0;
+    private static final Integer UPDATED_POSITION = 1;
 
     private static final Integer DEFAULT_ORDER = 1;
     private static final Integer UPDATED_ORDER = 2;
@@ -78,7 +75,7 @@ class PlayerGameResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PlayerGame createEntity() {
-        return new PlayerGame().positionx(DEFAULT_POSITIONX).positiony(DEFAULT_POSITIONY).order(DEFAULT_ORDER).isWinner(DEFAULT_IS_WINNER);
+        return new PlayerGame().position(DEFAULT_POSITION).order(DEFAULT_ORDER).isWinner(DEFAULT_IS_WINNER);
     }
 
     /**
@@ -88,7 +85,7 @@ class PlayerGameResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static PlayerGame createUpdatedEntity() {
-        return new PlayerGame().positionx(UPDATED_POSITIONX).positiony(UPDATED_POSITIONY).order(UPDATED_ORDER).isWinner(UPDATED_IS_WINNER);
+        return new PlayerGame().position(UPDATED_POSITION).order(UPDATED_ORDER).isWinner(UPDATED_IS_WINNER);
     }
 
     @BeforeEach
@@ -209,8 +206,7 @@ class PlayerGameResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(playerGame.getId().intValue())))
-            .andExpect(jsonPath("$.[*].positionx").value(hasItem(DEFAULT_POSITIONX)))
-            .andExpect(jsonPath("$.[*].positiony").value(hasItem(DEFAULT_POSITIONY)))
+            .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
             .andExpect(jsonPath("$.[*].order").value(hasItem(DEFAULT_ORDER)))
             .andExpect(jsonPath("$.[*].isWinner").value(hasItem(DEFAULT_IS_WINNER)));
     }
@@ -227,8 +223,7 @@ class PlayerGameResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(playerGame.getId().intValue()))
-            .andExpect(jsonPath("$.positionx").value(DEFAULT_POSITIONX))
-            .andExpect(jsonPath("$.positiony").value(DEFAULT_POSITIONY))
+            .andExpect(jsonPath("$.position").value(DEFAULT_POSITION))
             .andExpect(jsonPath("$.order").value(DEFAULT_ORDER))
             .andExpect(jsonPath("$.isWinner").value(DEFAULT_IS_WINNER));
     }
@@ -252,7 +247,7 @@ class PlayerGameResourceIT {
         PlayerGame updatedPlayerGame = playerGameRepository.findById(playerGame.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedPlayerGame are not directly saved in db
         em.detach(updatedPlayerGame);
-        updatedPlayerGame.positionx(UPDATED_POSITIONX).positiony(UPDATED_POSITIONY).order(UPDATED_ORDER).isWinner(UPDATED_IS_WINNER);
+        updatedPlayerGame.position(UPDATED_POSITION).order(UPDATED_ORDER).isWinner(UPDATED_IS_WINNER);
         PlayerGameDTO playerGameDTO = playerGameMapper.toDto(updatedPlayerGame);
 
         restPlayerGameMockMvc
@@ -371,7 +366,7 @@ class PlayerGameResourceIT {
         PlayerGame partialUpdatedPlayerGame = new PlayerGame();
         partialUpdatedPlayerGame.setId(playerGame.getId());
 
-        partialUpdatedPlayerGame.positionx(UPDATED_POSITIONX).positiony(UPDATED_POSITIONY).order(UPDATED_ORDER).isWinner(UPDATED_IS_WINNER);
+        partialUpdatedPlayerGame.position(UPDATED_POSITION).order(UPDATED_ORDER).isWinner(UPDATED_IS_WINNER);
 
         restPlayerGameMockMvc
             .perform(

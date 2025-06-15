@@ -20,8 +20,7 @@ describe('PlayerGame Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            positionx: expect.any(Object),
-            positiony: expect.any(Object),
+            position: expect.any(Object),
             order: expect.any(Object),
             isWinner: expect.any(Object),
             game: expect.any(Object),
@@ -36,8 +35,7 @@ describe('PlayerGame Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            positionx: expect.any(Object),
-            positiony: expect.any(Object),
+            position: expect.any(Object),
             order: expect.any(Object),
             isWinner: expect.any(Object),
             game: expect.any(Object),

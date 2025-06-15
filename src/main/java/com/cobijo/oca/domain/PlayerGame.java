@@ -21,12 +21,8 @@ public class PlayerGame implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "positionx", nullable = false)
-    private Integer positionx;
-
-    @NotNull
-    @Column(name = "positiony", nullable = false)
-    private Integer positiony;
+    @Column(name = "position", nullable = false)
+    private Integer position;
 
     @NotNull
     @Column(name = "jhi_order", nullable = false)
@@ -58,30 +54,17 @@ public class PlayerGame implements Serializable {
         this.id = id;
     }
 
-    public Integer getPositionx() {
-        return this.positionx;
+    public Integer getPosition() {
+        return this.position;
     }
 
-    public PlayerGame positionx(Integer positionx) {
-        this.setPositionx(positionx);
+    public PlayerGame position(Integer position) {
+        this.setPosition(position);
         return this;
     }
 
-    public void setPositionx(Integer positionx) {
-        this.positionx = positionx;
-    }
-
-    public Integer getPositiony() {
-        return this.positiony;
-    }
-
-    public PlayerGame positiony(Integer positiony) {
-        this.setPositiony(positiony);
-        return this;
-    }
-
-    public void setPositiony(Integer positiony) {
-        this.positiony = positiony;
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
     public Integer getOrder() {
@@ -160,8 +143,7 @@ public class PlayerGame implements Serializable {
     public String toString() {
         return "PlayerGame{" +
             "id=" + getId() +
-            ", positionx=" + getPositionx() +
-            ", positiony=" + getPositiony() +
+            ", position=" + getPosition() +
             ", order=" + getOrder() +
             ", isWinner='" + getIsWinner() + "'" +
             "}";

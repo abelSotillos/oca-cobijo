@@ -13,10 +13,7 @@ public class PlayerGameDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Integer positionx;
-
-    @NotNull
-    private Integer positiony;
+    private Integer position;
 
     @NotNull
     private Integer order;
@@ -35,20 +32,12 @@ public class PlayerGameDTO implements Serializable {
         this.id = id;
     }
 
-    public Integer getPositionx() {
-        return positionx;
+    public Integer getPosition() {
+        return position;
     }
 
-    public void setPositionx(Integer positionx) {
-        this.positionx = positionx;
-    }
-
-    public Integer getPositiony() {
-        return positiony;
-    }
-
-    public void setPositiony(Integer positiony) {
-        this.positiony = positiony;
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
     public Integer getOrder() {
@@ -109,8 +98,7 @@ public class PlayerGameDTO implements Serializable {
     public String toString() {
         return "PlayerGameDTO{" +
             "id=" + getId() +
-            ", positionx=" + getPositionx() +
-            ", positiony=" + getPositiony() +
+            ", position=" + getPosition() +
             ", order=" + getOrder() +
             ", isWinner='" + getIsWinner() + "'" +
             ", game=" + getGame() +

@@ -6,12 +6,7 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "positionx",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "positiony",
+      "fieldName": "position",
       "fieldType": "Integer",
       "fieldValidateRules": ["required"]
     },

@@ -18,8 +18,7 @@ type PlayerGameFormDefaults = Pick<NewPlayerGame, 'id' | 'isWinner'>;
 
 type PlayerGameFormGroupContent = {
   id: FormControl<IPlayerGame['id'] | NewPlayerGame['id']>;
-  positionx: FormControl<IPlayerGame['positionx']>;
-  positiony: FormControl<IPlayerGame['positiony']>;
+  position: FormControl<IPlayerGame['position']>;
   order: FormControl<IPlayerGame['order']>;
   isWinner: FormControl<IPlayerGame['isWinner']>;
   game: FormControl<IPlayerGame['game']>;
@@ -43,10 +42,7 @@ export class PlayerGameFormService {
           validators: [Validators.required],
         },
       ),
-      positionx: new FormControl(playerGameRawValue.positionx, {
-        validators: [Validators.required],
-      }),
-      positiony: new FormControl(playerGameRawValue.positiony, {
+      position: new FormControl(playerGameRawValue.position, {
         validators: [Validators.required],
       }),
       order: new FormControl(playerGameRawValue.order, {

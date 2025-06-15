@@ -2,30 +2,26 @@ import { IPlayerGame, NewPlayerGame } from './player-game.model';
 
 export const sampleWithRequiredData: IPlayerGame = {
   id: 25740,
-  positionx: 26127,
-  positiony: 6784,
+  position: 1,
   order: 19029,
 };
 
 export const sampleWithPartialData: IPlayerGame = {
   id: 22428,
-  positionx: 13398,
-  positiony: 2516,
+  position: 2,
   order: 1650,
   isWinner: false,
 };
 
 export const sampleWithFullData: IPlayerGame = {
   id: 31235,
-  positionx: 14656,
-  positiony: 18929,
+  position: 3,
   order: 16916,
   isWinner: true,
 };
 
 export const sampleWithNewData: NewPlayerGame = {
-  positionx: 27405,
-  positiony: 2785,
+  position: 4,
   order: 32306,
   id: null,
 };

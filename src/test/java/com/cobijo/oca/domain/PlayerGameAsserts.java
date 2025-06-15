@@ -47,8 +47,7 @@ public class PlayerGameAsserts {
     public static void assertPlayerGameUpdatableFieldsEquals(PlayerGame expected, PlayerGame actual) {
         assertThat(expected)
             .as("Verify PlayerGame relevant properties")
-            .satisfies(e -> assertThat(e.getPositionx()).as("check positionx").isEqualTo(actual.getPositionx()))
-            .satisfies(e -> assertThat(e.getPositiony()).as("check positiony").isEqualTo(actual.getPositiony()))
+            .satisfies(e -> assertThat(e.getPosition()).as("check position").isEqualTo(actual.getPosition()))
             .satisfies(e -> assertThat(e.getOrder()).as("check order").isEqualTo(actual.getOrder()))
             .satisfies(e -> assertThat(e.getIsWinner()).as("check isWinner").isEqualTo(actual.getIsWinner()));
     }

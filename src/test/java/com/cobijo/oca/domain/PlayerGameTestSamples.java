@@ -11,18 +11,17 @@ public class PlayerGameTestSamples {
     private static final AtomicInteger intCount = new AtomicInteger(random.nextInt() + (2 * Short.MAX_VALUE));
 
     public static PlayerGame getPlayerGameSample1() {
-        return new PlayerGame().id(1L).positionx(1).positiony(1).order(1);
+        return new PlayerGame().id(1L).position(0).order(1);
     }
 
     public static PlayerGame getPlayerGameSample2() {
-        return new PlayerGame().id(2L).positionx(2).positiony(2).order(2);
+        return new PlayerGame().id(2L).position(1).order(2);
     }
 
     public static PlayerGame getPlayerGameRandomSampleGenerator() {
         return new PlayerGame()
             .id(longCount.incrementAndGet())
-            .positionx(intCount.incrementAndGet())
-            .positiony(intCount.incrementAndGet())
+            .position(intCount.incrementAndGet())
             .order(intCount.incrementAndGet());
     }
 }
