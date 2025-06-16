@@ -19,9 +19,6 @@ public class PlayerGameTestSamples {
     }
 
     public static PlayerGame getPlayerGameRandomSampleGenerator() {
-        return new PlayerGame()
-            .id(longCount.incrementAndGet())
-            .position(intCount.incrementAndGet())
-            .order(intCount.incrementAndGet());
+        return new PlayerGame().id(longCount.incrementAndGet()).position(intCount.incrementAndGet()).order(intCount.incrementAndGet());
     }
 }

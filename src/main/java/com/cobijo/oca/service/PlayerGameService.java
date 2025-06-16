@@ -174,7 +174,7 @@ public class PlayerGameService {
 
         PlayerGame currentPlayer = players.get(currentTurn);
         int dice = (int) (Math.random() * 6) + 1;
-        int boardSize = 21;
+        int boardSize = 22;
         int newIndex = (currentPlayer.getPosition() + dice) % boardSize;
         currentPlayer.setPosition(newIndex);
         playerGameRepository.save(currentPlayer);

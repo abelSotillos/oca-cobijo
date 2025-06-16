@@ -1,27 +1,28 @@
 import Phaser from 'phaser';
 
 export const BOARD_COORDS: [number, number][] = [
-  [7, 0],
-  [7, 1],
-  [7, 2],
-  [7, 3],
-  [7, 4],
-  [7, 5],
-  [7, 6],
-  [7, 7],
-  [6, 7],
-  [5, 7],
-  [4, 7],
+  [14, 2],
+  [14, 7],
+  [14, 11],
+  [13, 14],
+  [9, 14],
+  [6, 14],
+  [2, 14],
+  [1, 11],
+  [1, 8],
+  [1, 4],
+  [1, 1],
+  [6, 1],
+  [11, 1],
+  [12, 5],
+  [12, 8],
+  [11, 11],
+  [7, 11],
+  [4, 11],
   [3, 7],
-  [2, 7],
-  [1, 7],
-  [0, 7],
-  [0, 6],
-  [0, 5],
-  [0, 4],
-  [0, 3],
-  [0, 2],
-  [0, 1],
+  [4, 4],
+  [9, 4],
+  [7, 7],
 ];
 export const BOARD_ROWS = 16;
 export const BOARD_COLS = 16;
@@ -44,7 +45,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.image('board', 'content/images/tablero.jpgg');
+    this.load.image('board', 'content/images/tablero.jpg');
   }
 
   create(): void {
@@ -58,8 +59,8 @@ export class MainScene extends Phaser.Scene {
         const x = col * this.tileWidth;
         const y = row * this.tileHeight;
         const color = (row + col) % 2 === 0 ? 0xffffff : 0xcccccc;
-        const rect = this.add.rectangle(x + this.tileWidth / 2, y + this.tileHeight / 2, this.tileWidth, this.tileHeight, color, 0.1);
-        rect.setStrokeStyle(1, 0x900001);
+        const rect = this.add.rectangle(x + this.tileWidth / 2, y + this.tileHeight / 2, this.tileWidth, this.tileHeight, color, 0.0);
+        rect.setStrokeStyle(0, 0x900001);
       }
     }
     this.players.forEach(p => {
