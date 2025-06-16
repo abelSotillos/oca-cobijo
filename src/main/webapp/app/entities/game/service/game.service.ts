@@ -6,6 +6,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IGame, NewGame } from '../game.model';
+import { IRollResult } from '../roll-result.model';
 
 export type PartialUpdateGame = Partial<IGame> & Pick<IGame, 'id'>;
 
@@ -52,8 +53,8 @@ export class GameService {
     return this.http.post<IGame>(`${this.resourceUrl}/${id}/start`, {}, { observe: 'response' });
   }
 
-  roll(id: number): Observable<EntityResponseType> {
-    return this.http.post<IGame>(`${this.resourceUrl}/${id}/roll`, {}, { observe: 'response' });
+  roll(id: number): Observable<HttpResponse<IRollResult>> {
+    return this.http.post<IRollResult>(`${this.resourceUrl}/${id}/roll`, {}, { observe: 'response' });
   }
 
   findByCode(code: string): Observable<EntityResponseType> {
