@@ -4,6 +4,7 @@ import com.cobijo.oca.repository.GameRepository;
 import com.cobijo.oca.service.GameService;
 import com.cobijo.oca.service.PlayerGameService;
 import com.cobijo.oca.service.dto.GameDTO;
+import com.cobijo.oca.web.websocket.dto.DiceRollDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
 import com.cobijo.oca.web.websocket.GameWebsocketService;
 import jakarta.validation.Valid;
@@ -95,11 +96,11 @@ public class GameResource {
     }
 
     @PostMapping("/{id}/roll")
-    public ResponseEntity<GameDTO> rollDice(@PathVariable("id") Long id) {
+    public ResponseEntity<DiceRollDTO> rollDice(@PathVariable("id") Long id) {
         LOG.debug("REST request to roll dice for game : {}", id);
-        GameDTO gameDTO = playerGameService.rollDice(id);
-        gameWebsocketService.sendGameUpdate(gameDTO);
-        return ResponseEntity.ok().body(gameDTO);
+        DiceRollDTO dto = playerGameService.rollDice(id);
+        gameWebsocketService.sendDiceRoll(dto);
+        return ResponseEntity.ok().body(dto);
     }
 
     /**

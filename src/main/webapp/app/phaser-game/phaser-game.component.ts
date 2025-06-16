@@ -5,6 +5,8 @@ import { IGame } from 'app/entities/game/game.model';
 import { IPlayerGame } from 'app/entities/player-game/player-game.model';
 import { PlayerGameService } from 'app/entities/player-game/service/player-game.service';
 import { GameService } from 'app/entities/game/service/game.service';
+import { IRollResult } from 'app/entities/game/roll-result.model';
+import { TrackerService } from 'app/core/tracker/tracker.service';
 import { DiceAnimationComponent } from './dice-animation/dice-animation.component';
 
 @Component({
@@ -28,12 +30,19 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
 
   private readonly playerGameService = inject(PlayerGameService);
   private readonly gameService = inject(GameService);
+  private readonly trackerService = inject(TrackerService);
 
   ngOnInit(): void {
     if (!this.game?.id) {
       return;
     }
     this.loadPlayers();
+    this.trackerService.stomp.watch('/topic/dice').subscribe(message => {
+      const roll = JSON.parse(message.body) as IRollResult;
+      if (roll.game.id === this.game?.id) {
+        this.handleRollResult(roll);
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -48,22 +57,25 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     if (!this.scene || this.players.length === 0 || !this.game?.id) {
       return;
     }
-    this.diceValue = Math.floor(Math.random() * 6) + 1;
-    this.showDice = true;
     this.rolling = true;
+    this.gameService.roll(this.game.id).subscribe(res => {
+      const roll = res.body;
+      if (roll) {
+        this.handleRollResult(roll);
+      } else {
+        this.rolling = false;
+      }
+    });
+  }
+
+  private handleRollResult(roll: IRollResult): void {
+    this.diceValue = roll.dice;
+    this.currentTurn = roll.game.currentTurn ?? 0;
+    this.showDice = true;
+    this.loadPlayers();
     setTimeout(() => {
+      this.showDice = false;
       this.rolling = false;
-      this.gameService.roll(this.game!.id).subscribe(res => {
-        const updatedGame = res.body;
-        if (!updatedGame) {
-          return;
-        }
-        this.currentTurn = updatedGame.currentTurn ?? 0;
-        this.loadPlayers();
-        setTimeout(() => {
-          this.showDice = false;
-        }, 500);
-      });
     }, 1000);
   }
 

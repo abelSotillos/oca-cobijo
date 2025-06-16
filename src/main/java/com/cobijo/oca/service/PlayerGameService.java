@@ -9,6 +9,7 @@ import com.cobijo.oca.repository.PlayerGameRepository;
 import com.cobijo.oca.repository.UserProfileRepository;
 import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.service.dto.PlayerGameDTO;
+import com.cobijo.oca.web.websocket.dto.DiceRollDTO;
 import com.cobijo.oca.service.mapper.GameMapper;
 import com.cobijo.oca.service.mapper.PlayerGameMapper;
 import java.util.List;
@@ -161,7 +162,7 @@ public class PlayerGameService {
         playerGameRepository.deleteById(id);
     }
 
-    public GameDTO rollDice(Long gameId) {
+    public DiceRollDTO rollDice(Long gameId) {
         LOG.debug("Request to roll dice for game : {}", gameId);
         Game game = gameRepository.findById(gameId).orElseThrow();
         List<PlayerGame> players = playerGameRepository.findByGameIdOrderByOrder(gameId);
@@ -182,6 +183,6 @@ public class PlayerGameService {
         game.setCurrentTurn((currentTurn + 1) % players.size());
         game = gameRepository.save(game);
 
-        return gameMapper.toDto(game);
+        return new DiceRollDTO(gameMapper.toDto(game), dice);
     }
 }
