@@ -1,11 +1,32 @@
 import Phaser from 'phaser';
 
-export const VALID_PATH = [
-  [3, 15],
-  [8, 15],
+export const BOARD_COORDS: [number, number][] = [
+  [14, 2],
+  [14, 7],
+  [14, 11],
+  [13, 14],
+  [9, 14],
+  [6, 14],
+  [2, 14],
+  [1, 11],
+  [1, 8],
+  [1, 4],
+  [1, 1],
+  [6, 1],
+  [11, 1],
+  [12, 5],
+  [12, 8],
+  [11, 11],
+  [7, 11],
+  [4, 11],
+  [3, 7],
+  [4, 4],
+  [9, 4],
+  [7, 7],
 ];
 export const BOARD_ROWS = 16;
 export const BOARD_COLS = 16;
+export const BOARD_SIZE = BOARD_COORDS.length;
 export const TILE_SIZE = 64; // Default size, will be overridden for responsive layout
 export interface PlayerToken {
   id: number;
@@ -24,7 +45,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
-    this.load.image('board', 'content/images/tablero.png');
+    this.load.image('board', 'content/images/tablero.jpg');
   }
 
   create(): void {
@@ -38,8 +59,8 @@ export class MainScene extends Phaser.Scene {
         const x = col * this.tileWidth;
         const y = row * this.tileHeight;
         const color = (row + col) % 2 === 0 ? 0xffffff : 0xcccccc;
-        const rect = this.add.rectangle(x + this.tileWidth / 2, y + this.tileHeight / 2, this.tileWidth, this.tileHeight, color, 0.1);
-        rect.setStrokeStyle(1, 0x900001);
+        const rect = this.add.rectangle(x + this.tileWidth / 2, y + this.tileHeight / 2, this.tileWidth, this.tileHeight, color, 0.0);
+        rect.setStrokeStyle(0, 0x900001);
       }
     }
     this.players.forEach(p => {
@@ -55,7 +76,7 @@ export class MainScene extends Phaser.Scene {
 
   movePlayer(index: number, steps: number): void {
     const player = this.players[index];
-    player.position = (player.position + steps) % (BOARD_ROWS * BOARD_COLS);
+    player.position = (player.position + steps) % BOARD_SIZE;
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       this.tweens.add({
@@ -70,7 +91,7 @@ export class MainScene extends Phaser.Scene {
 
   setPlayerPosition(index: number, position: number): void {
     const player = this.players[index];
-    player.position = position % (BOARD_ROWS * BOARD_COLS);
+    player.position = position % BOARD_SIZE;
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       player.sprite.setPosition(col * this.tileWidth + this.tileWidth / 2, row * this.tileHeight + this.tileHeight / 2);
@@ -78,8 +99,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private indexToCoord(index: number): { row: number; col: number } {
-    const row = Math.floor(index / BOARD_COLS);
-    const col = index % BOARD_COLS;
+    const [row, col] = BOARD_COORDS[index % BOARD_SIZE];
     return { row, col };
   }
 }

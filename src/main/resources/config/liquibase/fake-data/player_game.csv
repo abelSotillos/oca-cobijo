@@ -1,11 +1,4 @@
-id;positionx;positiony;jhi_order;is_winner
-1;16062;25114;1942;false
-2;17864;16508;15643;false
-3;14411;6088;14563;false
-4;18191;16676;10745;false
-5;26388;30117;22350;false
-6;12861;2351;30373;true
-7;9129;24234;13529;true
-8;21597;25647;24262;false
-9;32490;18244;19019;false
-10;11774;12825;26980;false
+id;position;jhi_order;is_winner
+1;0;1;false
+2;1;2;false
+3;2;3;false

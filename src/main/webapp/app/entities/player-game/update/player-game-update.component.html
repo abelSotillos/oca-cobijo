@@ -13,32 +13,16 @@
           </div>
         }
 
-        @let positionxRef = editForm.get('positionx')!;
+        @let positionRef = editForm.get('position')!;
         <div class="mb-3">
-          <label class="form-label" for="field_positionx">Positionx</label>
-          <input type="number" class="form-control" name="positionx" id="field_positionx" data-cy="positionx" formControlName="positionx" />
-          @if (positionxRef.invalid && (positionxRef.dirty || positionxRef.touched)) {
+          <label class="form-label" for="field_position">Position</label>
+          <input type="number" class="form-control" name="position" id="field_position" data-cy="position" formControlName="position" />
+          @if (positionRef.invalid && (positionRef.dirty || positionRef.touched)) {
             <div>
-              @if (editForm.get('positionx')?.errors?.required) {
+              @if (editForm.get('position')?.errors?.required) {
                 <small class="form-text text-danger">Este campo es obligatorio.</small>
               }
-              <small class="form-text text-danger" [hidden]="!editForm.get('positionx')?.errors?.number"
-                >Este campo debe ser un número.</small
-              >
-            </div>
-          }
-        </div>
-
-        @let positionyRef = editForm.get('positiony')!;
-        <div class="mb-3">
-          <label class="form-label" for="field_positiony">Positiony</label>
-          <input type="number" class="form-control" name="positiony" id="field_positiony" data-cy="positiony" formControlName="positiony" />
-          @if (positionyRef.invalid && (positionyRef.dirty || positionyRef.touched)) {
-            <div>
-              @if (editForm.get('positiony')?.errors?.required) {
-                <small class="form-text text-danger">Este campo es obligatorio.</small>
-              }
-              <small class="form-text text-danger" [hidden]="!editForm.get('positiony')?.errors?.number"
+              <small class="form-text text-danger" [hidden]="!editForm.get('position')?.errors?.number"
                 >Este campo debe ser un número.</small
               >
             </div>

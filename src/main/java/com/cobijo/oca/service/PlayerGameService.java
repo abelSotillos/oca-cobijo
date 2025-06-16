@@ -132,8 +132,7 @@ public class PlayerGameService {
         PlayerGame pg = new PlayerGame();
         pg.setGame(game);
         pg.setUserProfile(userProfile);
-        pg.setPositionx(0);
-        pg.setPositiony(0);
+        pg.setPosition(0);
         pg.setOrder(playerGameRepository.findByGameIdOrderByOrder(gameId).size());
         pg.setIsWinner(false);
         pg = playerGameRepository.save(pg);
@@ -175,12 +174,9 @@ public class PlayerGameService {
 
         PlayerGame currentPlayer = players.get(currentTurn);
         int dice = (int) (Math.random() * 6) + 1;
-        int boardCols = 8;
-        int boardRows = 8;
-        int index = currentPlayer.getPositiony() * boardCols + currentPlayer.getPositionx();
-        int newIndex = (index + dice) % (boardCols * boardRows);
-        currentPlayer.setPositionx(newIndex % boardCols);
-        currentPlayer.setPositiony(newIndex / boardCols);
+        int boardSize = 22;
+        int newIndex = (currentPlayer.getPosition() + dice) % boardSize;
+        currentPlayer.setPosition(newIndex);
         playerGameRepository.save(currentPlayer);
 
         game.setCurrentTurn((currentTurn + 1) % players.size());
