@@ -12,6 +12,7 @@ import { GameService } from 'app/entities/game/service/game.service';
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/service/user.service';
 import { UserProfileService } from '../service/user-profile.service';
+import { LogoService } from '../service/logo.service';
 import { IUserProfile } from '../user-profile.model';
 import { UserProfileFormGroup, UserProfileFormService } from './user-profile-form.service';
 
@@ -26,12 +27,14 @@ export class UserProfileUpdateComponent implements OnInit {
 
   gamesSharedCollection: IGame[] = [];
   usersSharedCollection: IUser[] = [];
+  logos: string[] = [];
 
   protected userProfileService = inject(UserProfileService);
   protected userProfileFormService = inject(UserProfileFormService);
   protected gameService = inject(GameService);
   protected userService = inject(UserService);
   protected activatedRoute = inject(ActivatedRoute);
+  protected logoService = inject(LogoService);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: UserProfileFormGroup = this.userProfileFormService.createUserProfileFormGroup();
@@ -49,6 +52,7 @@ export class UserProfileUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+    this.logoService.query().subscribe(logos => (this.logos = logos));
   }
 
   previousState(): void {
@@ -63,6 +67,10 @@ export class UserProfileUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.userProfileService.create(userProfile));
     }
+  }
+
+  selectLogo(logo: string): void {
+    this.editForm.get('avatarUrl')?.setValue(logo);
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUserProfile>>): void {
