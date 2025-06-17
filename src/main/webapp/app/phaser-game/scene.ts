@@ -11,7 +11,7 @@ export const BOARD_COORDS: [number, number][] = [
   [1, 11],
   [1, 8],
   [1, 4],
-  [1, 1],
+  [2, 1],
   [6, 1],
   [11, 1],
   [12, 5],
@@ -68,7 +68,7 @@ export class MainScene extends Phaser.Scene {
       p.sprite = this.add.circle(
         col * this.tileWidth + this.tileWidth / 2,
         row * this.tileHeight + this.tileHeight / 2,
-        Math.min(this.tileWidth, this.tileHeight) / 3,
+        Math.min(this.tileWidth, this.tileHeight) / 1,
         p.color,
       );
     });
