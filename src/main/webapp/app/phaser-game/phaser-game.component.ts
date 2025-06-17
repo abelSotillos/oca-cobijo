@@ -58,6 +58,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       return;
     }
     this.rolling = true;
+    this.showDice = true;
     this.gameService.roll(this.game.id).subscribe(res => {
       const roll = res.body;
       if (roll) {
@@ -73,13 +74,13 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   private handleRollResult(roll: IRollResult): void {
-    this.diceValue = roll.dice;
-    this.currentTurn = roll.game.currentTurn ?? 0;
     this.showDice = true;
     setTimeout(() => {
       this.loadPlayers();
-      this.showDice = false;
       this.rolling = false;
+      setTimeout(() => {
+        this.showDice = false;
+      }, 500);
     }, 1000);
   }
 

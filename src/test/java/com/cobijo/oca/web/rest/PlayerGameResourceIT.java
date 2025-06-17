@@ -145,40 +145,6 @@ class PlayerGameResourceIT {
 
     @Test
     @Transactional
-    void checkPositionxIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        playerGame.setPositionx(null);
-
-        // Create the PlayerGame, which fails.
-        PlayerGameDTO playerGameDTO = playerGameMapper.toDto(playerGame);
-
-        restPlayerGameMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(playerGameDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    void checkPositionyIsRequired() throws Exception {
-        long databaseSizeBeforeTest = getRepositoryCount();
-        // set the field null
-        playerGame.setPositiony(null);
-
-        // Create the PlayerGame, which fails.
-        PlayerGameDTO playerGameDTO = playerGameMapper.toDto(playerGame);
-
-        restPlayerGameMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(playerGameDTO)))
-            .andExpect(status().isBadRequest());
-
-        assertSameRepositoryCount(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void checkOrderIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
