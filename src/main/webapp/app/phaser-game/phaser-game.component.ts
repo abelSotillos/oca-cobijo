@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, inject } from '@angular/core';
 import Phaser from 'phaser';
-import { MainScene, PlayerToken, BOARD_SIZE } from './scene';
+import { MainScene, PlayerToken, BOARD_SIZE, DEFAULT_TOKEN_COLORS } from './scene';
 import { IGame } from 'app/entities/game/game.model';
 import { IPlayerGame } from 'app/entities/player-game/player-game.model';
 import { PlayerGameService } from 'app/entities/player-game/service/player-game.service';
@@ -58,6 +58,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       return;
     }
     this.rolling = true;
+    this.showDice = true;
     this.gameService.roll(this.game.id).subscribe(res => {
       const roll = res.body;
       if (roll) {
@@ -68,26 +69,26 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     });
   }
 
-  private handleRollResult(roll: IRollResult): void {
-    this.diceValue = roll.dice;
-    this.currentTurn = roll.game.currentTurn ?? 0;
-    this.showDice = true;
-    this.loadPlayers();
-    setTimeout(() => {
-      this.showDice = false;
-      this.rolling = false;
-    }, 1000);
-  }
-
   ngOnDestroy(): void {
     this.phaserGame?.destroy(true);
+  }
+
+  private handleRollResult(roll: IRollResult): void {
+    this.showDice = true;
+    setTimeout(() => {
+      this.rolling = false;
+      setTimeout(() => {
+        this.showDice = false;
+      }, 500);
+    }, 1000);
   }
 
   private startGame(): void {
     const tokens: PlayerToken[] = this.players.map(p => ({
       id: p.id,
-      color: Phaser.Display.Color.RandomRGB().color,
+      color: DEFAULT_TOKEN_COLORS[Math.floor(Math.random() * DEFAULT_TOKEN_COLORS.length)],
       position: p.position ?? 0,
+      avatarUrl: p.userProfile?.avatarUrl ?? null,
     }));
     this.scene = new MainScene(tokens);
     const containerWidth = this.gameContainer.nativeElement.offsetWidth || window.innerWidth;

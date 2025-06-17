@@ -11,7 +11,7 @@ export const BOARD_COORDS: [number, number][] = [
   [1, 11],
   [1, 8],
   [1, 4],
-  [1, 1],
+  [2, 1],
   [6, 1],
   [11, 1],
   [12, 5],
@@ -28,11 +28,13 @@ export const BOARD_ROWS = 16;
 export const BOARD_COLS = 16;
 export const BOARD_SIZE = BOARD_COORDS.length;
 export const TILE_SIZE = 64; // Default size, will be overridden for responsive layout
+export const DEFAULT_TOKEN_COLORS = [0xe57373, 0x64b5f6, 0x81c784, 0xffb74d, 0xba68c8, 0x4db6ac];
 export interface PlayerToken {
   id: number;
   color: number;
   position: number;
-  sprite?: Phaser.GameObjects.Arc;
+  avatarUrl?: string | null;
+  sprite?: Phaser.GameObjects.Container;
 }
 
 export class MainScene extends Phaser.Scene {
@@ -46,6 +48,11 @@ export class MainScene extends Phaser.Scene {
 
   preload(): void {
     this.load.image('board', 'content/images/tablero.jpg');
+    this.players.forEach(p => {
+      if (p.avatarUrl) {
+        this.load.image(`avatar-${p.id}`, p.avatarUrl);
+      }
+    });
   }
 
   create(): void {
@@ -65,12 +72,22 @@ export class MainScene extends Phaser.Scene {
     }
     this.players.forEach(p => {
       const { row, col } = this.indexToCoord(p.position);
-      p.sprite = this.add.circle(
-        col * this.tileWidth + this.tileWidth / 2,
-        row * this.tileHeight + this.tileHeight / 2,
-        Math.min(this.tileWidth, this.tileHeight) / 3,
-        p.color,
-      );
+      const x = col * this.tileWidth + this.tileWidth / 2;
+      const y = row * this.tileHeight + this.tileHeight / 2;
+      const radius = Math.min(this.tileWidth, this.tileHeight) / 1;
+      const container = this.add.container(x, y);
+      const circle = this.add.circle(0, 0, radius, p.color);
+      container.add(circle);
+      if (p.avatarUrl) {
+        const image = this.add.image(0, 0, `avatar-${p.id}`);
+        image.setDisplaySize(radius * 2, radius * 2);
+        const maskGraphics = this.make.graphics({ x, y });
+        maskGraphics.fillStyle(0xffffff);
+        maskGraphics.fillCircle(0, 0, radius);
+        image.setMask(maskGraphics.createGeometryMask());
+        container.add(image);
+      }
+      p.sprite = container;
     });
   }
 

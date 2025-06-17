@@ -76,13 +76,22 @@ export default class HomeComponent implements OnInit, OnDestroy {
     if (!sessionId) {
       return;
     }
-    this.userProfileService.findBySession(sessionId).subscribe(profileRes => {
-      const profile = profileRes.body;
-      if (profile?.id != null) {
-        this.gameService.findByUser(profile.id).subscribe(res => {
-          this.games.set(res.body ?? []);
-        });
-      }
+    this.userProfileService.findBySession(sessionId).subscribe({
+      // eslint-disable-next-line object-shorthand
+      next: profileRes => {
+        const profile = profileRes.body;
+        if (profile?.id != null) {
+          this.gameService.findByUser(profile.id).subscribe(res => {
+            this.games.set(res.body ?? []);
+          });
+        } else {
+          localStorage.removeItem('session_id');
+        }
+      },
+      // eslint-disable-next-line object-shorthand
+      error: () => {
+        localStorage.removeItem('session_id');
+      },
     });
   }
 }

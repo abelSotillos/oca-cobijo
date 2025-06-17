@@ -6,6 +6,7 @@ jest.mock('phaser', () => ({
   AUTO: 0,
   GameObjects: { Image: class {} },
 }));
+jest.mock('@stomp/rx-stomp', () => ({ RxStomp: class {} }));
 
 import { PhaserGameComponent } from './phaser-game.component';
 import { provideHttpClient } from '@angular/common/http';
