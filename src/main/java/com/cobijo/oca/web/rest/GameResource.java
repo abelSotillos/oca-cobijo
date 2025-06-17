@@ -7,6 +7,7 @@ import com.cobijo.oca.service.dto.GameDTO;
 import com.cobijo.oca.web.rest.errors.BadRequestAlertException;
 import com.cobijo.oca.web.websocket.GameWebsocketService;
 import com.cobijo.oca.web.websocket.dto.DiceRollDTO;
+import com.cobijo.oca.web.websocket.dto.DiceRollDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
