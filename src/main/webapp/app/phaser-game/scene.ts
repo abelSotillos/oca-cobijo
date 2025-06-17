@@ -74,14 +74,14 @@ export class MainScene extends Phaser.Scene {
       const { row, col } = this.indexToCoord(p.position);
       const x = col * this.tileWidth + this.tileWidth / 2;
       const y = row * this.tileHeight + this.tileHeight / 2;
-      const radius = Math.min(this.tileWidth, this.tileHeight) / 3;
+      const radius = Math.min(this.tileWidth, this.tileHeight) / 1;
       const container = this.add.container(x, y);
       const circle = this.add.circle(0, 0, radius, p.color);
       container.add(circle);
       if (p.avatarUrl) {
         const image = this.add.image(0, 0, `avatar-${p.id}`);
         image.setDisplaySize(radius * 2, radius * 2);
-        const maskGraphics = this.make.graphics({ x: 0, y: 0 });
+        const maskGraphics = this.make.graphics({ x, y });
         maskGraphics.fillStyle(0xffffff);
         maskGraphics.fillCircle(0, 0, radius);
         image.setMask(maskGraphics.createGeometryMask());
