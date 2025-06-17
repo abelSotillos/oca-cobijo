@@ -76,6 +76,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   private handleRollResult(roll: IRollResult): void {
     this.showDice = true;
     setTimeout(() => {
+      this.loadPlayers();
       this.rolling = false;
       setTimeout(() => {
         this.showDice = false;
