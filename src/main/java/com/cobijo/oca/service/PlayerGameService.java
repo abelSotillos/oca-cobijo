@@ -187,7 +187,19 @@ public class PlayerGameService {
 
         int dice = (int) (Math.random() * 6) + 1;
         int boardSize = 22;
-        int newIndex = (currentPlayer.getPosition() + dice) % boardSize;
+        int finalIndex = boardSize - 1;
+        int tentative = currentPlayer.getPosition() + dice;
+        int newIndex;
+
+        if (tentative == finalIndex) {
+            currentPlayer.setIsWinner(true);
+            newIndex = finalIndex;
+        } else if (tentative > finalIndex) {
+            int diff = tentative - finalIndex;
+            newIndex = finalIndex - diff;
+        } else {
+            newIndex = tentative;
+        }
 
         // simple board rules
         if (newIndex == 6) {
