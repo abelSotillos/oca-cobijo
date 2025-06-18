@@ -61,6 +61,13 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="blockedTurns">
+              <div class="d-flex">
+                <span>Blocked Turns</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="game.id">
               <div class="d-flex">
                 <span>Game</span>
@@ -85,6 +92,7 @@
               <td>{{ playerGame.position }}</td>
               <td>{{ playerGame.order }}</td>
               <td>{{ playerGame.isWinner }}</td>
+              <td>{{ playerGame.blockedTurns }}</td>
               <td>
                 @if (playerGame.game) {
                   <div>

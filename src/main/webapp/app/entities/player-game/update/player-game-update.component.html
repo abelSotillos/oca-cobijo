@@ -48,6 +48,26 @@
           <input type="checkbox" class="form-check" name="isWinner" id="field_isWinner" data-cy="isWinner" formControlName="isWinner" />
         </div>
 
+        @let blockedTurnsRef = editForm.get('blockedTurns')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_blockedTurns">Blocked Turns</label>
+          <input
+            type="number"
+            class="form-control"
+            name="blockedTurns"
+            id="field_blockedTurns"
+            data-cy="blockedTurns"
+            formControlName="blockedTurns"
+          />
+          @if (blockedTurnsRef.invalid && (blockedTurnsRef.dirty || blockedTurnsRef.touched)) {
+            <div>
+              <small class="form-text text-danger" [hidden]="!editForm.get('blockedTurns')?.errors?.number"
+                >Este campo debe ser un número.</small
+              >
+            </div>
+          }
+        </div>
+
         <div class="mb-3">
           <label class="form-label" for="field_game">Game</label>
           <select class="form-control" id="field_game" data-cy="game" name="game" formControlName="game" [compareWith]="compareGame">

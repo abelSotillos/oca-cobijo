@@ -20,6 +20,8 @@ public class PlayerGameDTO implements Serializable {
 
     private Boolean isWinner;
 
+    private Integer blockedTurns;
+
     private GameDTO game;
 
     private UserProfileDTO userProfile;
@@ -54,6 +56,14 @@ public class PlayerGameDTO implements Serializable {
 
     public void setIsWinner(Boolean isWinner) {
         this.isWinner = isWinner;
+    }
+
+    public Integer getBlockedTurns() {
+        return blockedTurns;
+    }
+
+    public void setBlockedTurns(Integer blockedTurns) {
+        this.blockedTurns = blockedTurns;
     }
 
     public GameDTO getGame() {
@@ -101,6 +111,7 @@ public class PlayerGameDTO implements Serializable {
             ", position=" + getPosition() +
             ", order=" + getOrder() +
             ", isWinner='" + getIsWinner() + "'" +
+            ", blockedTurns=" + getBlockedTurns() +
             ", game=" + getGame() +
             ", userProfile=" + getUserProfile() +
             "}";

@@ -6,6 +6,7 @@ export interface IPlayerGame {
   position?: number | null;
   order?: number | null;
   isWinner?: boolean | null;
+  blockedTurns?: number | null;
   game?: Pick<IGame, 'id'> | null;
   userProfile?: IUserProfile | null;
 }

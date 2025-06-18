@@ -14,13 +14,14 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type PlayerGameFormGroupInput = IPlayerGame | PartialWithRequiredKeyOf<NewPlayerGame>;
 
-type PlayerGameFormDefaults = Pick<NewPlayerGame, 'id' | 'isWinner'>;
+type PlayerGameFormDefaults = Pick<NewPlayerGame, 'id' | 'isWinner' | 'blockedTurns'>;
 
 type PlayerGameFormGroupContent = {
   id: FormControl<IPlayerGame['id'] | NewPlayerGame['id']>;
   position: FormControl<IPlayerGame['position']>;
   order: FormControl<IPlayerGame['order']>;
   isWinner: FormControl<IPlayerGame['isWinner']>;
+  blockedTurns: FormControl<IPlayerGame['blockedTurns']>;
   game: FormControl<IPlayerGame['game']>;
   userProfile: FormControl<IPlayerGame['userProfile']>;
 };
@@ -49,6 +50,7 @@ export class PlayerGameFormService {
         validators: [Validators.required],
       }),
       isWinner: new FormControl(playerGameRawValue.isWinner),
+      blockedTurns: new FormControl(playerGameRawValue.blockedTurns),
       game: new FormControl(playerGameRawValue.game),
       userProfile: new FormControl(playerGameRawValue.userProfile),
     });
@@ -72,6 +74,7 @@ export class PlayerGameFormService {
     return {
       id: null,
       isWinner: false,
+      blockedTurns: 0,
     };
   }
 }
