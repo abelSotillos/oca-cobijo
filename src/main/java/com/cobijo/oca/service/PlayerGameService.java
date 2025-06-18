@@ -189,8 +189,49 @@ public class PlayerGameService {
         int boardSize = 22;
         int finalIndex = boardSize - 1;
         int tentative = currentPlayer.getPosition() + dice;
-        int newIndex;
+        boolean repeatTurn = false;
 
+        switch (tentative) {
+            case 2:
+                tentative += 4;
+                break;
+            case 3:
+                repeatTurn = true;
+                break;
+            case 4:
+                tentative += 4;
+                break;
+            case 6:
+                tentative += 5;
+                break;
+            case 8:
+                tentative = Math.max(0, tentative - 4);
+                break;
+            case 11:
+                tentative += 6;
+                break;
+            case 13:
+                repeatTurn = true;
+                break;
+            case 16:
+                tentative = 0;
+                break;
+            case 17:
+                tentative += 4;
+                if (tentative >= finalIndex) {
+                    tentative = finalIndex;
+                    currentPlayer.setIsWinner(true);
+                }
+                break;
+            case 21:
+                tentative = finalIndex;
+                currentPlayer.setIsWinner(true);
+                break;
+            default:
+                break;
+        }
+
+        int newIndex;
         if (tentative == finalIndex) {
             currentPlayer.setIsWinner(true);
             newIndex = finalIndex;
@@ -201,17 +242,12 @@ public class PlayerGameService {
             newIndex = tentative;
         }
 
-        // simple board rules
-        if (newIndex == 6) {
-            newIndex = (newIndex + 3) % boardSize;
-        } else if (newIndex == 10) {
-            currentPlayer.setBlockedTurns(2);
-        }
-
         currentPlayer.setPosition(newIndex);
         playerGameRepository.save(currentPlayer);
 
-        game.setCurrentTurn((currentTurn + 1) % players.size());
+        if (!repeatTurn) {
+            game.setCurrentTurn((currentTurn + 1) % players.size());
+        }
         game = gameRepository.save(game);
 
         return new DiceRollDTO(gameMapper.toDto(game), dice);
