@@ -31,6 +31,9 @@ public class PlayerGame implements Serializable {
     @Column(name = "is_winner")
     private Boolean isWinner;
 
+    @Column(name = "blocked_turns")
+    private Integer blockedTurns;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "playerGames", "userProfiles" }, allowSetters = true)
     private Game game;
@@ -93,6 +96,19 @@ public class PlayerGame implements Serializable {
         this.isWinner = isWinner;
     }
 
+    public Integer getBlockedTurns() {
+        return this.blockedTurns;
+    }
+
+    public PlayerGame blockedTurns(Integer blockedTurns) {
+        this.setBlockedTurns(blockedTurns);
+        return this;
+    }
+
+    public void setBlockedTurns(Integer blockedTurns) {
+        this.blockedTurns = blockedTurns;
+    }
+
     public Game getGame() {
         return this.game;
     }
@@ -146,6 +162,7 @@ public class PlayerGame implements Serializable {
             ", position=" + getPosition() +
             ", order=" + getOrder() +
             ", isWinner='" + getIsWinner() + "'" +
+            ", blockedTurns=" + getBlockedTurns() +
             "}";
     }
 }

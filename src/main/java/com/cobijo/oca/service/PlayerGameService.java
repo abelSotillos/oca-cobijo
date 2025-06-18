@@ -135,6 +135,7 @@ public class PlayerGameService {
         pg.setGame(game);
         pg.setUserProfile(userProfile);
         pg.setPosition(0);
+        pg.setBlockedTurns(0);
         pg.setOrder(playerGameRepository.findByGameIdOrderByOrder(gameId).size());
         pg.setIsWinner(false);
         pg = playerGameRepository.save(pg);
@@ -175,9 +176,26 @@ public class PlayerGameService {
         currentTurn = currentTurn % players.size();
 
         PlayerGame currentPlayer = players.get(currentTurn);
+
+        if (currentPlayer.getBlockedTurns() != null && currentPlayer.getBlockedTurns() > 0) {
+            currentPlayer.setBlockedTurns(currentPlayer.getBlockedTurns() - 1);
+            playerGameRepository.save(currentPlayer);
+            game.setCurrentTurn((currentTurn + 1) % players.size());
+            game = gameRepository.save(game);
+            return new DiceRollDTO(gameMapper.toDto(game), 0);
+        }
+
         int dice = (int) (Math.random() * 6) + 1;
         int boardSize = 22;
         int newIndex = (currentPlayer.getPosition() + dice) % boardSize;
+
+        // simple board rules
+        if (newIndex == 6) {
+            newIndex = (newIndex + 3) % boardSize;
+        } else if (newIndex == 10) {
+            currentPlayer.setBlockedTurns(2);
+        }
+
         currentPlayer.setPosition(newIndex);
         playerGameRepository.save(currentPlayer);
 
