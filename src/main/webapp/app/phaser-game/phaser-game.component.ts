@@ -75,6 +75,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
 
   private handleRollResult(roll: IRollResult): void {
     this.showDice = true;
+    this.diceValue = roll.dice;
     setTimeout(() => {
       this.loadPlayers();
       this.rolling = false;
@@ -82,6 +83,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
         this.showDice = false;
       }, 500);
     }, 1000);
+    this.game = roll.game;
   }
 
   private startGame(): void {
