@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import SharedModule from 'app/shared/shared.module';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import { AccountService } from 'app/core/auth/account.service';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
@@ -27,6 +28,7 @@ export default class NavbarComponent implements OnInit {
   private readonly loginService = inject(LoginService);
   private readonly profileService = inject(ProfileService);
   private readonly router = inject(Router);
+  private readonly stateStorageService = inject(StateStorageService);
 
   constructor() {
     const { VERSION } = environment;
@@ -55,6 +57,10 @@ export default class NavbarComponent implements OnInit {
     this.collapseNavbar();
     this.loginService.logout();
     this.router.navigate(['/login']);
+  }
+
+  hasSessionToken(): boolean {
+    return this.stateStorageService.getAuthenticationToken() !== null;
   }
 
   toggleNavbar(): void {
