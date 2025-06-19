@@ -7,7 +7,7 @@ Navbar
 
 .navbar-version {
   font-size: 0.65em;
-  color: $navbar-dark-color;
+  color: $navbar-light-color;
 }
 
 .profile-image {
@@ -21,6 +21,10 @@ Navbar
   a.nav-link {
     font-weight: 400;
   }
+}
+
+.main-navbar {
+  background-color: $body-bg;
 }
 
 /* ==========================================================================
