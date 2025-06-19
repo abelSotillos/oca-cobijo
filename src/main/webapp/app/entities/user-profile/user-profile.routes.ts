@@ -22,6 +22,13 @@ const userProfileRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
+    path: 'token/:sessionId/view',
+    loadComponent: () => import('./detail/user-profile-detail.component').then(m => m.UserProfileDetailComponent),
+    resolve: {
+      userProfile: UserProfileResolve,
+    },
+  },
+  {
     path: 'new',
     loadComponent: () => import('./update/user-profile-update.component').then(m => m.UserProfileUpdateComponent),
     resolve: {
