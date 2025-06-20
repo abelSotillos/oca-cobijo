@@ -6,6 +6,21 @@
     <span class="ms-2">Dado: {{ diceValue }}</span>
   }
 </div>
+@if (tokens.length > 0) {
+  <ngb-carousel class="mb-3" [interval]="0">
+    @for (token of tokens; let idx = $index) {
+      <ng-template ngbSlide>
+        <div class="d-flex align-items-center justify-content-center p-2">
+          <div class="token-circle" [style.backgroundColor]="getColor(token.color)"></div>
+          <span class="ms-2">Posición: {{ token.position }}</span>
+          @if (isTurn(idx)) {
+            <span class="badge bg-success ms-2">Turno</span>
+          }
+        </div>
+      </ng-template>
+    }
+  </ngb-carousel>
+}
 <div id="gameContainer" #gameContainer></div>
 
 @if (showDice) {

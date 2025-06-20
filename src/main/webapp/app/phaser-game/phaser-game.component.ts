@@ -8,10 +8,11 @@ import { GameService } from 'app/entities/game/service/game.service';
 import { IRollResult } from 'app/entities/game/roll-result.model';
 import { TrackerService } from 'app/core/tracker/tracker.service';
 import { DiceAnimationComponent } from './dice-animation/dice-animation.component';
+import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-phaser-game',
-  imports: [DiceAnimationComponent],
+  imports: [SharedModule, DiceAnimationComponent],
   templateUrl: './phaser-game.component.html',
   styleUrl: './phaser-game.component.scss',
 })
@@ -25,6 +26,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   currentTurn = 0;
   private myIndex = -1;
   private players: IPlayerGame[] = [];
+  private tokens: PlayerToken[] = [];
   private phaserGame?: Phaser.Game;
   private scene?: MainScene;
 
@@ -86,6 +88,14 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     this.game = roll.game;
   }
 
+  isTurn(index: number): boolean {
+    return index === this.currentTurn;
+  }
+
+  getColor(color: number): string {
+    return `#${color.toString(16).padStart(6, '0')}`;
+  }
+
   private startGame(): void {
     const tokens: PlayerToken[] = this.players.map(p => ({
       id: p.id,
@@ -93,6 +103,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       position: p.position ?? 0,
       avatarUrl: p.userProfile?.avatarUrl ?? null,
     }));
+    this.tokens = tokens;
     this.scene = new MainScene(tokens);
     const containerWidth = this.gameContainer.nativeElement.offsetWidth || window.innerWidth;
     const width = Math.min(800, containerWidth);
@@ -135,6 +146,9 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
             }
           } else {
             this.scene!.setPlayerPosition(idx, pos);
+          }
+          if (this.tokens[idx]) {
+            this.tokens[idx].position = pos;
           }
         });
       }
