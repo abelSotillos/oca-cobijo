@@ -37,14 +37,13 @@ export default class HomeComponent implements OnInit, OnDestroy {
           this.loadGames();
           return;
         }
-
-        const sessionId = localStorage.getItem('session_id');
-        if (sessionId) {
-          this.loadGames();
-        } else {
-          this.router.navigate(['/login']);
-        }
       });
+    const sessionId = localStorage.getItem('session_id');
+    if (sessionId) {
+      this.loadGames();
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   login(): void {
@@ -74,6 +73,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   private loadGames(): void {
     const sessionId = localStorage.getItem('session_id');
     if (!sessionId) {
+      this.login();
       return;
     }
     this.userProfileService.findBySession(sessionId).subscribe({
