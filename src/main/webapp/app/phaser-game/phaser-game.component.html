@@ -1,4 +1,7 @@
 <div class="mb-2">
+  @if (winner) {
+    <div class="alert alert-success">¡{{ winner.userProfile?.nickname }} ha ganado la partida!</div>
+  }
   @if (isMyTurn) {
     <button class="btn btn-primary" (click)="rollDice()">Tirar dado</button>
   }
@@ -8,12 +11,12 @@
 </div>
 @if (tokens.length > 0) {
   <ngb-carousel class="mb-3" [interval]="0">
-    @for (token of tokens; let idx = $index) {
+    @for (token of tokens; track $index) {
       <ng-template ngbSlide>
         <div class="d-flex align-items-center justify-content-center p-2">
           <div class="token-circle" [style.backgroundColor]="getColor(token.color)"></div>
           <span class="ms-2">Posición: {{ token.position }}</span>
-          @if (isTurn(idx)) {
+          @if (isTurn($index)) {
             <span class="badge bg-success ms-2">Turno</span>
           }
         </div>

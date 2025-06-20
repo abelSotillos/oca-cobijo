@@ -24,9 +24,10 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   showDice = false;
   rolling = false;
   currentTurn = 0;
+  tokens: PlayerToken[] = [];
+  winner: IPlayerGame | null = null;
   private myIndex = -1;
   private players: IPlayerGame[] = [];
-  private tokens: PlayerToken[] = [];
   private phaserGame?: Phaser.Game;
   private scene?: MainScene;
 
@@ -75,6 +76,14 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     this.phaserGame?.destroy(true);
   }
 
+  isTurn(index: number): boolean {
+    return index === this.currentTurn;
+  }
+
+  getColor(color: number): string {
+    return `#${color.toString(16).padStart(6, '0')}`;
+  }
+
   private handleRollResult(roll: IRollResult): void {
     this.showDice = true;
     this.diceValue = roll.dice;
@@ -86,14 +95,6 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
       }, 500);
     }, 1000);
     this.game = roll.game;
-  }
-
-  isTurn(index: number): boolean {
-    return index === this.currentTurn;
-  }
-
-  getColor(color: number): string {
-    return `#${color.toString(16).padStart(6, '0')}`;
   }
 
   private startGame(): void {
@@ -126,6 +127,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     this.playerGameService.findByGame(this.game.id).subscribe(players => {
       const prevPlayers = this.players;
       this.players = players;
+      this.winner = players.find(p => p.isWinner) ?? null;
       const sessionId = localStorage.getItem('session_id');
       this.myIndex = players.findIndex(p => p.userProfile?.sessionId === sessionId);
 
