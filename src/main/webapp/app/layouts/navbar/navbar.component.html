@@ -30,7 +30,7 @@
         <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
         @if (hasSessionToken()) {
           <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link" routerLink="/user-profile" (click)="collapseNavbar()">
+            <a class="nav-link" (click)="goToProfile()">
               <span>
                 <fa-icon icon="user"></fa-icon>
                 <span>Perfil de usuario</span>
