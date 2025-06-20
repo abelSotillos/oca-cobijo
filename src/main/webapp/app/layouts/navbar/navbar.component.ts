@@ -60,7 +60,7 @@ export default class NavbarComponent implements OnInit {
   }
 
   hasSessionToken(): boolean {
-    return this.stateStorageService.getAuthenticationToken() !== null;
+    return this.stateStorageService.getAuthenticationToken() !== null || localStorage.getItem('session_id') !== null;
   }
 
   goToProfile(): void {
