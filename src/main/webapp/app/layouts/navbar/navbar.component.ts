@@ -63,6 +63,16 @@ export default class NavbarComponent implements OnInit {
     return this.stateStorageService.getAuthenticationToken() !== null;
   }
 
+  goToProfile(): void {
+    this.collapseNavbar();
+    const sessionId = localStorage.getItem('session_id');
+    if (sessionId) {
+      this.router.navigate(['/user-profile/token', sessionId, 'edit']);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
   toggleNavbar(): void {
     this.isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed);
   }

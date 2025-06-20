@@ -29,6 +29,13 @@ const userProfileRoute: Routes = [
     },
   },
   {
+    path: 'token/:sessionId/edit',
+    loadComponent: () => import('./update/user-profile-update.component').then(m => m.UserProfileUpdateComponent),
+    resolve: {
+      userProfile: UserProfileResolve,
+    },
+  },
+  {
     path: 'new',
     loadComponent: () => import('./update/user-profile-update.component').then(m => m.UserProfileUpdateComponent),
     resolve: {
