@@ -14,12 +14,13 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type UserProfileFormGroupInput = IUserProfile | PartialWithRequiredKeyOf<NewUserProfile>;
 
-type UserProfileFormDefaults = Pick<NewUserProfile, 'id' | 'games'>;
+type UserProfileFormDefaults = Pick<NewUserProfile, 'id' | 'games' | 'sessionId'>;
 
 type UserProfileFormGroupContent = {
   id: FormControl<IUserProfile['id'] | NewUserProfile['id']>;
   nickname: FormControl<IUserProfile['nickname']>;
   avatarUrl: FormControl<IUserProfile['avatarUrl']>;
+  sessionId: FormControl<IUserProfile['sessionId']>;
   games: FormControl<IUserProfile['games']>;
   user: FormControl<IUserProfile['user']>;
 };
@@ -45,6 +46,7 @@ export class UserProfileFormService {
         validators: [Validators.required],
       }),
       avatarUrl: new FormControl(userProfileRawValue.avatarUrl),
+      sessionId: new FormControl(userProfileRawValue.sessionId),
       games: new FormControl(userProfileRawValue.games ?? []),
       user: new FormControl(userProfileRawValue.user),
     });
@@ -68,6 +70,7 @@ export class UserProfileFormService {
     return {
       id: null,
       games: [],
+      sessionId: null,
     };
   }
 }

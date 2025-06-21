@@ -30,6 +30,7 @@
           <label class="form-label" for="field_avatarUrl">Avatar Url</label>
           <input type="text" class="form-control" name="avatarUrl" id="field_avatarUrl" data-cy="avatarUrl" formControlName="avatarUrl" />
         </div>
+        <input type="hidden" formControlName="sessionId" />
         <div class="mb-3" *ngIf="logos.length > 0">
           <label class="form-label">Elige un logo</label>
           <div class="d-flex flex-wrap gap-2">
