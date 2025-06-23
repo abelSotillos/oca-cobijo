@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -14,11 +15,12 @@ import { UserProfileService } from 'app/entities/user-profile/service/user-profi
   selector: 'jhi-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
-  imports: [SharedModule, RouterModule],
+  imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule],
 })
 export default class HomeComponent implements OnInit, OnDestroy {
   account = signal<Account | null>(null);
   games = signal<IGame[]>([]);
+  roomCode = new FormControl('', { nonNullable: true });
 
   private readonly destroy$ = new Subject<void>();
 
@@ -65,6 +67,23 @@ export default class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  searchRoom(): void {
+    const code = this.roomCode.value.trim();
+    if (code) {
+      this.gameService.findByCode(code).subscribe({
+        next: res => {
+          if (res.body?.code) {
+            this.router.navigate(['/room', res.body.code]);
+          }
+        },
+        // eslint-disable-next-line object-shorthand
+        error: () => {
+          // ignore error, handled by alert-error component
+        },
+      });
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -77,7 +96,6 @@ export default class HomeComponent implements OnInit, OnDestroy {
       return;
     }
     this.userProfileService.findBySession(sessionId).subscribe({
-      // eslint-disable-next-line object-shorthand
       next: profileRes => {
         const profile = profileRes.body;
         if (profile?.id != null) {
