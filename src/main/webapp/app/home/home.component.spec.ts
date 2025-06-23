@@ -111,6 +111,18 @@ describe('Home Component', () => {
     });
   });
 
+  describe('searchRoom', () => {
+    it('should navigate to room when game is found', () => {
+      jest.spyOn(mockGameService, 'findByCode').mockReturnValue(of(new HttpResponse({ body: { id: 1, code: 'xyz' } })));
+      comp.roomCode.setValue('xyz');
+
+      comp.searchRoom();
+
+      expect(mockGameService.findByCode).toHaveBeenCalledWith('xyz');
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['/room', 'xyz']);
+    });
+  });
+
   describe('ngOnDestroy', () => {
     it('Should destroy authentication state subscription on component destroy', () => {
       // GIVEN
