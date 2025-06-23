@@ -34,7 +34,7 @@ export class TrackerService {
 
     this.accountService.getAuthenticationState().subscribe({
       next: (account: Account | null) => {
-        if (account) {
+        if (account || localStorage.getItem('session_id')) {
           this.connect();
         } else {
           this.disconnect();

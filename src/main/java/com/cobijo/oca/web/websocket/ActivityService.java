@@ -28,8 +28,9 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
     @MessageMapping("/topic/activity")
     @SendTo("/topic/tracker")
     public ActivityDTO sendActivity(@Payload ActivityDTO activityDTO, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
-        activityDTO.setUserLogin(principal.getName());
-        activityDTO.setSessionId(stompHeaderAccessor.getSessionId());
+        String sessionToken = principal.getName();
+        activityDTO.setUserLogin(sessionToken);
+        activityDTO.setSessionId(sessionToken);
         activityDTO.setIpAddress(stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString());
         activityDTO.setTime(Instant.now());
         LOG.debug("Sending user tracking data {}", activityDTO);

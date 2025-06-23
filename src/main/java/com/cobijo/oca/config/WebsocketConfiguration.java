@@ -1,8 +1,11 @@
 package com.cobijo.oca.config;
 
 import com.cobijo.oca.security.AuthoritiesConstants;
+import com.cobijo.oca.repository.UserProfileRepository;
 import java.security.Principal;
 import java.util.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.*;
@@ -22,9 +25,11 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
     public static final String IP_ADDRESS = "IP_ADDRESS";
 
     private final JHipsterProperties jHipsterProperties;
+    private final UserProfileRepository userProfileRepository;
 
-    public WebsocketConfiguration(JHipsterProperties jHipsterProperties) {
+    public WebsocketConfiguration(JHipsterProperties jHipsterProperties, UserProfileRepository userProfileRepository) {
         this.jHipsterProperties = jHipsterProperties;
+        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
@@ -77,6 +82,19 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
             @Override
             protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
                 Principal principal = request.getPrincipal();
+                if (principal instanceof Authentication authentication) {
+                    return userProfileRepository
+                        .findOneByUser_Login(authentication.getName())
+                        .map(profile ->
+                            (Principal)
+                                new UsernamePasswordAuthenticationToken(
+                                    profile.getSessionId(),
+                                    authentication.getCredentials(),
+                                    authentication.getAuthorities()
+                                )
+                        )
+                        .orElse(authentication);
+                }
                 if (principal == null) {
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
                     authorities.add(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
