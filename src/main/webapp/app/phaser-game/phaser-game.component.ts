@@ -88,19 +88,23 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
     this.showDice = true;
     this.diceValue = roll.dice;
 
-    if (this.scene && roll.dice > 0) {
-      const currentPlayerIndex = this.currentTurn;
-      this.scene.movePlayer(currentPlayerIndex, roll.dice);
-    }
+    // Calculate which player actually rolled (before the turn was updated)
+    const newCurrentTurn = roll.game.currentTurn ?? 0;
+    const playerWhoRolled = newCurrentTurn === 0 ? this.players.length - 1 : newCurrentTurn - 1;
 
     setTimeout(() => {
-      this.loadPlayers();
       this.rolling = false;
       setTimeout(() => {
         this.showDice = false;
+        if (this.scene && roll.dice > 0) {
+          this.scene.movePlayer(playerWhoRolled, roll.dice);
+        }
       }, 500);
     }, 1000);
+
     this.game = roll.game;
+    this.currentTurn = newCurrentTurn;
+    this.loadPlayers();
   }
 
   private startGame(): void {
@@ -144,7 +148,7 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
           const pos = p.position ?? 0;
           if (prevPlayers[idx]) {
             const oldPos = prevPlayers[idx].position ?? 0;
-            if (pos !== oldPos) {
+            if (pos !== oldPos && !this.rolling) {
               this.scene!.setPlayerPosition(idx, pos);
             }
           } else {

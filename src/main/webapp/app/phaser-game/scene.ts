@@ -109,8 +109,47 @@ export class MainScene extends Phaser.Scene {
     if (remainingSteps <= 0) return;
 
     const player = this.players[index];
-    const nextPos = (currentPos + 1) % BOARD_SIZE;
-    const { row, col } = this.indexToCoord(nextPos);
+    this.movePlayerStepByStepWithBounce(index, remainingSteps, currentPos, true);
+  }
+
+  private movePlayerStepByStepWithBounce(index: number, remainingSteps: number, currentPos: number, movingForward: boolean): void {
+    if (remainingSteps <= 0) return;
+
+    const player = this.players[index];
+    let nextPos: number;
+
+    if (movingForward) {
+      nextPos = currentPos + 1;
+      if (nextPos > 21) {
+        // Hit the boundary, now we move backward
+        nextPos = 21;
+        this.animateToPosition(index, nextPos, () => {
+          this.movePlayerStepByStepWithBounce(index, remainingSteps - 1, nextPos, false);
+        });
+        return;
+      }
+    } else {
+      nextPos = currentPos - 1;
+      if (nextPos < 0) {
+        nextPos = 0;
+      }
+    }
+
+    this.animateToPosition(index, nextPos, () => {
+      if (remainingSteps === 1) {
+        player.position = nextPos;
+        this.checkSpecialPosition(index, nextPos);
+      } else {
+        this.time.delayedCall(100, () => {
+          this.movePlayerStepByStepWithBounce(index, remainingSteps - 1, nextPos, movingForward);
+        });
+      }
+    });
+  }
+
+  private animateToPosition(index: number, position: number, onComplete: () => void): void {
+    const player = this.players[index];
+    const { row, col } = this.indexToCoord(position);
 
     if (player.sprite) {
       this.tweens.add({
@@ -119,16 +158,7 @@ export class MainScene extends Phaser.Scene {
         y: row * this.tileHeight + this.tileHeight / 2,
         duration: 300,
         ease: 'Power2',
-        onComplete: () => {
-          if (remainingSteps === 1) {
-            player.position = nextPos;
-            this.checkSpecialPosition(index, nextPos);
-          } else {
-            this.time.delayedCall(100, () => {
-              this.movePlayerStepByStep(index, remainingSteps - 1, nextPos);
-            });
-          }
-        },
+        onComplete,
       });
     }
   }
@@ -139,7 +169,7 @@ export class MainScene extends Phaser.Scene {
       this.time.delayedCall(2000, () => {
         const finalPosition = this.calculateFinalPosition(position);
         if (finalPosition !== position) {
-          this.movePlayerToFinalPosition(index, finalPosition);
+          this.movePlayerStepByStepToPosition(index, position, finalPosition);
         }
       });
     }
@@ -182,6 +212,63 @@ export class MainScene extends Phaser.Scene {
         y: row * this.tileHeight + this.tileHeight / 2,
         duration: 500,
         ease: 'Power2',
+      });
+    }
+  }
+
+  private movePlayerStepByStepToPosition(index: number, startPos: number, finalPos: number): void {
+    const player = this.players[index];
+    const difference = finalPos - startPos;
+
+    if (difference === 0) return;
+
+    const isForward = difference > 0;
+    const steps = Math.abs(difference);
+
+    this.movePlayerStepByStepDirection(index, startPos, steps, isForward, finalPos);
+  }
+
+  private movePlayerStepByStepDirection(
+    index: number,
+    currentPos: number,
+    remainingSteps: number,
+    isForward: boolean,
+    finalPos: number,
+  ): void {
+    if (remainingSteps <= 0) {
+      const player = this.players[index];
+      player.position = finalPos;
+      return;
+    }
+
+    const player = this.players[index];
+    let nextPos: number;
+
+    if (isForward) {
+      nextPos = currentPos + 1;
+      if (nextPos > 21) {
+        nextPos = 21 - (nextPos - 21);
+        if (nextPos < 0) nextPos = 0;
+      }
+    } else {
+      nextPos = currentPos - 1;
+      if (nextPos < 0) nextPos = 0;
+    }
+
+    const { row, col } = this.indexToCoord(nextPos);
+
+    if (player.sprite) {
+      this.tweens.add({
+        targets: player.sprite,
+        x: col * this.tileWidth + this.tileWidth / 2,
+        y: row * this.tileHeight + this.tileHeight / 2,
+        duration: 300,
+        ease: 'Power2',
+        onComplete: () => {
+          this.time.delayedCall(100, () => {
+            this.movePlayerStepByStepDirection(index, nextPos, remainingSteps - 1, isForward, finalPos);
+          });
+        },
       });
     }
   }
