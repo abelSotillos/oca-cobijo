@@ -10,6 +10,7 @@ import { Account } from 'app/core/auth/account.model';
 import { GameService } from 'app/entities/game/service/game.service';
 import { IGame } from 'app/entities/game/game.model';
 import { UserProfileService } from 'app/entities/user-profile/service/user-profile.service';
+import { TrackerService } from 'app/core/tracker/tracker.service';
 
 @Component({
   selector: 'jhi-home',
@@ -28,6 +29,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly gameService = inject(GameService);
   private readonly userProfileService = inject(UserProfileService);
+  private readonly trackerService = inject(TrackerService);
 
   ngOnInit(): void {
     this.accountService
@@ -43,6 +45,7 @@ export default class HomeComponent implements OnInit, OnDestroy {
     const sessionId = localStorage.getItem('session_id');
     if (sessionId) {
       this.loadGames();
+      this.trackerService.setup();
     } else {
       this.router.navigate(['/login']);
     }

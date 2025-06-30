@@ -31,10 +31,12 @@ export class TrackerService {
       // eslint-disable-next-line no-console
       debug: (msg: string): void => console.log(new Date(), msg),
     });
-
+    if (localStorage.getItem('session_id')) {
+      this.connect();
+    }
     this.accountService.getAuthenticationState().subscribe({
       next: (account: Account | null) => {
-        if (account || localStorage.getItem('session_id')) {
+        if (account) {
           this.connect();
         } else {
           this.disconnect();

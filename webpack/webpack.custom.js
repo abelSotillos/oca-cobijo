@@ -32,7 +32,7 @@ module.exports = async (config, options, targetOptions) => {
   }
 
   // eslint-disable-next-line no-constant-condition, no-constant-binary-expression
-  if (false && (targetOptions.target === 'serve' || config.watch)) {
+  if (targetOptions.target === 'serve' || config.watch) {
     config.plugins.push(
       new BrowserSyncPlugin(
         {

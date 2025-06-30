@@ -74,6 +74,10 @@ export default class RoomComponent implements OnInit {
     }
   }
 
+  copyLink(): void {
+    navigator.clipboard.writeText(this.shareLink());
+  }
+
   private loadPlayers(): void {
     const g = this.game();
     if (g?.id) {

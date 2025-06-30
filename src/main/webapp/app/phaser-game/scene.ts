@@ -93,17 +93,7 @@ export class MainScene extends Phaser.Scene {
 
   movePlayer(index: number, steps: number): void {
     const player = this.players[index];
-    player.position = (player.position + steps) % BOARD_SIZE;
-    const { row, col } = this.indexToCoord(player.position);
-    if (player.sprite) {
-      this.tweens.add({
-        targets: player.sprite,
-        x: col * this.tileWidth + this.tileWidth / 2,
-        y: row * this.tileHeight + this.tileHeight / 2,
-        duration: 300,
-        ease: 'Power2',
-      });
-    }
+    this.movePlayerStepByStep(index, steps, player.position);
   }
 
   setPlayerPosition(index: number, position: number): void {
@@ -112,6 +102,87 @@ export class MainScene extends Phaser.Scene {
     const { row, col } = this.indexToCoord(player.position);
     if (player.sprite) {
       player.sprite.setPosition(col * this.tileWidth + this.tileWidth / 2, row * this.tileHeight + this.tileHeight / 2);
+    }
+  }
+
+  private movePlayerStepByStep(index: number, remainingSteps: number, currentPos: number): void {
+    if (remainingSteps <= 0) return;
+
+    const player = this.players[index];
+    const nextPos = (currentPos + 1) % BOARD_SIZE;
+    const { row, col } = this.indexToCoord(nextPos);
+
+    if (player.sprite) {
+      this.tweens.add({
+        targets: player.sprite,
+        x: col * this.tileWidth + this.tileWidth / 2,
+        y: row * this.tileHeight + this.tileHeight / 2,
+        duration: 300,
+        ease: 'Power2',
+        onComplete: () => {
+          if (remainingSteps === 1) {
+            player.position = nextPos;
+            this.checkSpecialPosition(index, nextPos);
+          } else {
+            this.time.delayedCall(100, () => {
+              this.movePlayerStepByStep(index, remainingSteps - 1, nextPos);
+            });
+          }
+        },
+      });
+    }
+  }
+
+  private checkSpecialPosition(index: number, position: number): void {
+    const isSpecialPosition = this.isSpecialPosition(position);
+    if (isSpecialPosition) {
+      this.time.delayedCall(2000, () => {
+        const finalPosition = this.calculateFinalPosition(position);
+        if (finalPosition !== position) {
+          this.movePlayerToFinalPosition(index, finalPosition);
+        }
+      });
+    }
+  }
+
+  private isSpecialPosition(position: number): boolean {
+    return [2, 3, 4, 6, 8, 11, 13, 16, 17, 21].includes(position);
+  }
+
+  private calculateFinalPosition(position: number): number {
+    switch (position) {
+      case 2:
+        return 6;
+      case 4:
+        return 8;
+      case 6:
+        return 11;
+      case 8:
+        return Math.max(0, 4);
+      case 11:
+        return 17;
+      case 16:
+        return 0;
+      case 17:
+        return 21;
+      default:
+        return position;
+    }
+  }
+
+  private movePlayerToFinalPosition(index: number, finalPosition: number): void {
+    const player = this.players[index];
+    player.position = finalPosition;
+    const { row, col } = this.indexToCoord(finalPosition);
+
+    if (player.sprite) {
+      this.tweens.add({
+        targets: player.sprite,
+        x: col * this.tileWidth + this.tileWidth / 2,
+        y: row * this.tileHeight + this.tileHeight / 2,
+        duration: 500,
+        ease: 'Power2',
+      });
     }
   }
 

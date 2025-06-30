@@ -1,21 +1,19 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="jhi-user-profile-heading" data-cy="UserProfileCreateUpdateHeading">Crear o editar User Profile</h2>
+      <h2 id="jhi-user-profile-heading" data-cy="UserProfileCreateUpdateHeading">Edita tu perfil</h2>
 
       <div>
         <jhi-alert-error></jhi-alert-error>
 
-        @if (editForm.controls.id.value !== null) {
-          <div class="mb-3">
-            <label class="form-label" for="field_id">ID</label>
-            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-          </div>
-        }
+        <div class="mb-3 d-none">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
 
         @let nicknameRef = editForm.get('nickname')!;
         <div class="mb-3">
-          <label class="form-label" for="field_nickname">Nickname</label>
+          <label class="form-label" for="field_nickname">Nombre</label>
           <input type="text" class="form-control" name="nickname" id="field_nickname" data-cy="nickname" formControlName="nickname" />
           @if (nicknameRef.invalid && (nicknameRef.dirty || nicknameRef.touched)) {
             <div>
@@ -26,7 +24,7 @@
           }
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 d-none">
           <label class="form-label" for="field_avatarUrl">Avatar Url</label>
           <input type="text" class="form-control" name="avatarUrl" id="field_avatarUrl" data-cy="avatarUrl" formControlName="avatarUrl" />
         </div>
@@ -44,7 +42,7 @@
           </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 d-none">
           <label for="field_games">Games</label>
           <select
             class="form-control"
@@ -61,7 +59,7 @@
           </select>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 d-none">
           <label class="form-label" for="field_user">User</label>
           <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
             <option [ngValue]="null"></option>
@@ -73,10 +71,6 @@
       </div>
 
       <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancelar</span>
-        </button>
-
         <button
           type="submit"
           id="save-entity"

@@ -87,6 +87,12 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
   private handleRollResult(roll: IRollResult): void {
     this.showDice = true;
     this.diceValue = roll.dice;
+
+    if (this.scene && roll.dice > 0) {
+      const currentPlayerIndex = this.currentTurn;
+      this.scene.movePlayer(currentPlayerIndex, roll.dice);
+    }
+
     setTimeout(() => {
       this.loadPlayers();
       this.rolling = false;
@@ -138,13 +144,8 @@ export class PhaserGameComponent implements OnDestroy, OnInit, OnChanges {
           const pos = p.position ?? 0;
           if (prevPlayers[idx]) {
             const oldPos = prevPlayers[idx].position ?? 0;
-            const total = BOARD_SIZE;
-            let steps = pos - oldPos;
-            if (steps < 0) {
-              steps += total;
-            }
-            if (steps !== 0) {
-              this.scene!.movePlayer(idx, steps);
+            if (pos !== oldPos) {
+              this.scene!.setPlayerPosition(idx, pos);
             }
           } else {
             this.scene!.setPlayerPosition(idx, pos);

@@ -1,9 +1,11 @@
-<div class="mb-3">
+<div *ngIf="game() && game()!.status === 'WAITING'" class="mb-3">
   <label>Enlace para compartir:</label>
-  <input type="text" class="form-control" [value]="shareLink()" readonly />
+  <div class="input-group">
+    <button class="btn btn-outline-primary" (click)="copyLink()">Copiar enlace</button>
+  </div>
 </div>
 
-<ul class="list-group mb-3">
+<ul *ngIf="game() && game()!.status === 'WAITING'" class="list-group mb-3">
   <li *ngFor="let player of players()" class="list-group-item">
     {{ player.userProfile?.nickname }}
   </li>

@@ -1,16 +1,16 @@
 <div class="main-div">
   <jhi-page-ribbon></jhi-page-ribbon>
-  @if (!isLoggin) {
-    <router-outlet name="navbar"></router-outlet>
-  } @else {
+  @if (isLoggin) {
     <div class="div-img">
       <img class="img-loggin" src="../../content/images/logotipo-cuadrado.png" />
     </div>
   }
-
   <div class="main-container">
     <div class="card jh-card">
       <router-outlet></router-outlet>
     </div>
   </div>
+  @if (!isLoggin) {
+    <router-outlet name="navbar"></router-outlet>
+  }
 </div>

@@ -1,16 +1,16 @@
 package com.cobijo.oca.config;
 
-import com.cobijo.oca.security.AuthoritiesConstants;
 import com.cobijo.oca.repository.UserProfileRepository;
+import com.cobijo.oca.security.AuthoritiesConstants;
 import java.security.Principal;
 import java.util.*;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.*;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.*;
@@ -86,12 +86,11 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
                     return userProfileRepository
                         .findOneByUser_Login(authentication.getName())
                         .map(profile ->
-                            (Principal)
-                                new UsernamePasswordAuthenticationToken(
-                                    profile.getSessionId(),
-                                    authentication.getCredentials(),
-                                    authentication.getAuthorities()
-                                )
+                            (Principal) new UsernamePasswordAuthenticationToken(
+                                profile.getSessionId(),
+                                authentication.getCredentials(),
+                                authentication.getAuthorities()
+                            )
                         )
                         .orElse(authentication);
                 }

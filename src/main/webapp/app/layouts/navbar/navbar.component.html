@@ -1,21 +1,16 @@
 <nav data-cy="navbar" class="navbar navbar-light navbar-expand-md main-navbar">
   <div class="container-fluid">
     <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
-      <span class="logo-img"></span>
-      <span class="navbar-title">OcaCobijo</span>
-      <span class="navbar-version">{{ version }}</span>
+      <span>
+        <fa-icon icon="home"></fa-icon>
+        <span>Partidas</span>
+      </span>
     </a>
-    <a
-      class="navbar-toggler d-lg-none"
-      href="javascript:void(0);"
-      data-toggle="collapse"
-      data-target="#navbarResponsive"
-      aria-controls="navbarResponsive"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      (click)="toggleNavbar()"
-    >
-      <fa-icon icon="bars"></fa-icon>
+    <a class="navbar-brand logo" (click)="goToProfile()">
+      <span>
+        <fa-icon icon="user"></fa-icon>
+        <span>Perfil</span>
+      </span>
     </a>
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
       <ul class="navbar-nav ms-auto">

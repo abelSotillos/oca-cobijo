@@ -15,8 +15,13 @@ h3,
 h4 {
   font-weight: 300;
   font-family: monospace;
+  color: #f6e7c6;
 }
-
+p,
+span,
+label {
+  color: #f6e7c6;
+}
 /* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
 a {
   color: #533f03;
@@ -74,6 +79,9 @@ Generic styles
   border: 5px solid #ec214c;
   padding: 10px;
   border-radius: 10px;
+  height: 100%;
+  overflow: auto;
+  background-color: #003253;
 }
 
 .error {
@@ -250,6 +258,7 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
   align-items: center;
   width: 100%;
   padding: 10px;
+  height: calc(100% - 64px);
 }
 .heigh-nav {
   height: calc(100% - 62px);
