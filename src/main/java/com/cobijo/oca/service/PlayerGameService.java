@@ -128,7 +128,7 @@ public class PlayerGameService {
         }
         Optional<PlayerGame> existing = playerGameRepository.findByGameIdAndUserProfileId(gameId, userProfileId);
         if (existing.isPresent()) {
-            return playerGameMapper.toDto(existing.get());
+            return playerGameMapper.toDto(existing.orElseThrow());
         }
         UserProfile userProfile = userProfileRepository.findById(userProfileId).orElseThrow();
         PlayerGame pg = new PlayerGame();
