@@ -7,8 +7,8 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:mysql://ocacobijo-mysql:3306/ocacobijo?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
       - SPRING_LIQUIBASE_URL=jdbc:mysql://ocacobijo-mysql:3306/ocacobijo?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-    ports:
-      - 8080:8080
+    expose:
+      - '8080'
     healthcheck:
       test:
         - CMD
