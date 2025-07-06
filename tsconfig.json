@@ -19,7 +19,8 @@
     "target": "es2022",
     "module": "es2020",
     "types": ["node"],
-    "lib": ["es2018", "es2020", "dom", "ES2022", "DOM"]
+    "lib": ["es2018", "es2020", "dom", "ES2022", "DOM"],
+    "skipLibCheck": true
   },
   "references": [
     {
