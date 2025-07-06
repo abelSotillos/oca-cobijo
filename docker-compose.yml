@@ -1,6 +1,8 @@
 services:
   ocacobijo:
-    image: ocacobijo
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
