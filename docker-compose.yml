@@ -11,6 +11,9 @@ services:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://ocacobijo-mysql:3306/ocacobijo?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     expose:
       - '8080'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.services.ocacobijo.loadbalancer.server.port=8080'
     healthcheck:
       test:
         - CMD
