@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql:W8cF17oLoWPlPgSEUAL81tX8JkOJFtsQJZWcUMhs0xHY6Kxmpf3VvMbkiibQlRb9@gksskw0ow8ogocgc84ow8w0s:3306/ocaCobijo?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/ocaCobijo?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     username: root
-    password: oXIjmjtutcMVvERW7pgsct1bn4fglIK8tISK4Q7lBVsecZOadQPZXBhKmowrIGcv
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
